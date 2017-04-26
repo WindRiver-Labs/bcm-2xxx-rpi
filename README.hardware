@@ -1,0 +1,91 @@
+		Raspberry Pi 3 Board Support Package
+
+
+Table of Contents
+=================
+
+1. Supported Boards
+2. Change History
+3. BSP Features
+4. BSP Notes
+
+
+1. Supported Boards
+===================
+
+This BSP supports the following boards:
+
+  + Raspberry Pi 3 Model B V1.2: BCM2837
+
+
+2. Change History
+=================
+
+  - 2017/07 (US94129): WRLinux 9.0, standard and preempt-rt support
+		Add the basic support for Raspberry Pi 3
+
+
+3. BSP Features
+===============
+
+3.1 Supported Features
+----------------------
+
+The following BSP features are validated and supported on boards where
+the corresponding h/w features exist.
+
+  o General Platform
+	+ DMA Engine
+	+ IOMMU
+	+ SMMU
+
+  o Bus
+	+ I2C: Two I2C buses
+	+ SPI: Two SPI buses
+
+  o Network
+
+	+ Ethernet Port: one smsc95xx USB 2.0 Ethernet
+	+ WIFI: BCM43340 SDIO
+
+  o Storage
+	+ SD: BCM2837 sdhost
+	+ USB2: 4 USB ports
+
+  o Multimedia:
+        + HDMI: one HDMI port on board
+
+        + AUDIO: the 3.5in jack connector on board or through HDMI.
+
+        + Camera: Video camera support with V4L2 controller
+
+  o Misc Devices
+	+ UART: mini uart to use as external gpio expansion board.
+		and not have the following capabilities: Break detection &
+		Framing errors detection & Parity bit & DCD, DSR, DTR or RI
+		signals.
+	+ Bluetooth: BCM43430 (multiplexing with UART pl011)
+	+ Watchdog: On-Chip H/W Watchdog
+
+3.2 Unsupported Features
+------------------------
+
+The following features are not supported and validated:
+	x DPI interface
+	x Power Management
+
+4. BSP Notes
+============
+
+4.1 Validated Board Info
+------------------------
+
+This BSP is only validated in following environment. If you use this BSP
+in a different environment it may possibly have some issues.
+
+	Processor:              BCM2837 (ARMv7 Processor rev 4 (v7l))
+	Board Revision:	        Rev 1.2
+	BootLoader:             Raspberry bootloader/GPU firmware and U-Boot
+	BootLoader Version:     Raspberry bootloader/GPU firmware contains in 2017-04-10-raspbian-jessie.img
+				U-Boot 2017.05-rc2-00067-g9fde52a (Apr 27 2017 - 11:14:29 +0800)
+

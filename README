@@ -1,0 +1,455 @@
+        Raspberry Pi 3 Boards
+
+
+1. About this document
+======================
+This document provides common and non-hardware specific information.
+Please refer to README.hardware for hardware specific information.
+
+Dependencies
+------------
+This layer depends on the oe-core version supplied with Wind River Linux
+and the wr-kernel layer.
+
+
+Maintenance
+-----------
+This layer is maintained by Wind River Systems, Inc.
+Contact <support@windriver.com> or your support representative for more
+information on submitting changes.
+
+
+Building the bcm-2xxx-rpi layer
+-------------------------------
+This layer and the wr-kernel layer should be added to bblayers.conf. 
+
+
+License
+-------
+Copyright (C) 2016 Wind River Systems, Inc.
+
+The right to copy, distribute or otherwise make use of this software may
+be licensed only pursuant to the terms of an applicable Wind River license
+agreement. No license to Wind River intellectual properly rights is granted
+herein. All rights not licensed by Wind River are reserved by Wind River.
+
+Source code included in tree for individual recipes is under the LICENSE
+stated in each recipe (.bb file) unless other stated.
+
+
+2. BSP Kernel and Image Combination
+====================================
+
+Supported WindRiver Linux kernel and image combinations for this BSP are
+documented in the following table.
+The leftmost column indicates the kernel type and the top row indicates the
+image type.
+A 'Y' in a content cell indicates support for the combination; 'N' indicates 
+that the combination is not supported:
+
+--------------------------------------------------------------------
+| kernel/image  | glibc-std | glibc-small | glibc-cgl | glibc-tiny |
+--------------------------------------------------------------------
+|   standard    |     Y     |      Y      |     N     |     N      |
+--------------------------------------------------------------------
+|   preempt_rt  |     Y     |      Y      |     N     |     N      |
+--------------------------------------------------------------------
+
+Note: With regard to the kernel and image types, please refer to the WindRiver 
+Linux specification for details.
+
+
+3. Board Specific Patches
+=========================
+
+To get a list of patches applied to the kernel specific to this BSP
+along with patch descriptions, use 'git whatchanged' on the default
+kernel (git whatchanged <kernel_type>..<bsp_name>). For example:
+
+  # bitbake -c devshell virtual/kernel
+  # git whatchanged standard/base..
+
+
+4. Boot Instructions
+====================
+
+It is necessary to load the DTB (device tree blob) into the target's memory
+prior to booting the kernel Image. The DTB file can be found in the export
+directory after building a project, or you can generate it manually with the
+following commands:
+
+To generate the DTB manually, change to the build directory, then run
+the following commands:
+
+	% bitbake -c devshell virtual/kernel
+	% make bcm2710-rpi-3-b.dtb
+
+The dtb can then be found in the
+  .../linux-<bsp_name>-<kernel type>-build/arch/arm/boot/dts
+directory.
+
+Typical u-boot settings apply to these boards. You will need to use
+setenv, printenv and saveenv, to configure, display and store your network 
+configuration details and kernel command line respectively. In order to
+TFTP a kernel, you need, minimally, to set the following:
+
+	- ipaddr
+	- gatewayip
+	- netmask
+	- serverip
+	- loadaddr
+	- dtbfile
+	- dtbaddr
+	- ethaddr
+	- eth1addr
+
+Your board may ship with the values for the MAC address of
+the Ethernet interfaces set to the defaults compiled into the
+u-boot image.  You should set the ethaddr, eth1addr and so on
+as per the manufacturer assigned values, usually indicated with
+a sticker on the board.
+
+Target specifics are usually set in the "bootargs" variable, and the
+kernel image is set in the "bootfile" variable. Don't forget that if you
+want these values to be available after a power cycle, you will need to run
+the saveenv command.
+
+Typically, convenience macros exist that will create a complete bootargs
+command line for the kernel based on variables that contain individual
+settings.  Since these macros exist as env variables themselves, they
+may or may not be present depending on who installed and configured
+u-boot for the board.
+
+The console device for the board is ttyS0 at 115200 baud. For the DTB
+address, 0x2000000 has been used with success by Wind River. The load address
+must be high enough to not interfere with kernel decompression. A value
+of 0x1000000 was used with success for all kernels tested by Wind River.
+
+4.1 NFS Root File System
+------------------------
+
+Example settings for the monitor (u-boot) are shown below:
+
+nfsboot=setenv bootargs root=/dev/nfs rw nfsroot=$serverip:$rootpath \
+ip=$ipaddr:$serverip:$gatewayip:$netmask:$hostname:$netdev:off \
+console=$consoledev,$baudrate $othbootargs;tftp $loadaddr $bootfile; \
+tftp $fdtaddr $fdtfile;bootz $loadaddr - $fdtaddr
+bootargs=earlypritk console=tty0 console=ttyS0,115200
+usbethaddr=00:04:9F:02:00:FD
+loadaddr=0x1000000
+fdtaddr=0x2000000
+gatewayip=192.168.1.1
+netmask=255.255.255.0
+ipaddr=192.168.1.100
+serverip=192.168.1.2
+netdev=eth0
+bootfile=zImage
+fdtfile=bcm2710-rpi-3-b.dtb
+rootpath=/tftpboot/rootfs
+
+4.2 Boot from SD card
+---------------------
+
+4.2.1 Deploy kernel, DTB image and file syetem image into your SD card
+-----------------------------------------------------------
+
+Refer to bootloader/README for information on how to make am SD card bootable.
+Deploy the kernel image, DTB image and file system image as follows:
+
+	# mount /dev/mmcblk0p2 /mnt/sd
+	# tar xfj wrlinux-image-glibc-std-bcm-2xxx-rpi.tar.bz2 --numeric-owner -C /mnt/sd
+	# umount /mnt/sd
+	# mount /dev/mmcblk0p1 /mnt/sd
+	# cp path_to_zImage /mnt/sd/boot
+	# cp path_to_bcm2710-rpi-3-b.dtb /mnt/sd/boot
+	# umount /mnt/sd
+
+4.3.2 Set u-boot environment variables and boot from SD card
+------------------------------------------------------------
+
+Run the following command to load the kernel image and DTB image:
+
+	=> setenv bootargs earlypritk console=tty0 console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootwait
+	=> mmc rescan
+	=> fatload mmc 0 0x1000000 zImage
+	=> fatload mmc 0 0x2000000 bcm2710-rpi-3-b.dtb
+	=> booti 0x1000000 - 0x2000000
+
+5. WiFi
+=======
+
+5.1 Introduction
+----------------
+To use this WiFi driver, you will need a microcode (uCode) image.
+The microcode is typically installed in /lib/firmware.
+
+5.2 Usage and verification
+--------------------------
+The following steps assume the essid broadcast by AP is "test-ap".
+
+1) Managed mode
+
+Before running the test, configure AP to be in unencryption mode.
+
+	$ ifconfig wlan0 down
+	$ ifconfig wlan0 up
+	$ iwconfig wlan0 essid test-ap
+	$ ifconfig wlan0 192.168.1.100
+	$ ping 192.168.1.253
+
+2) Managed mode with WPA-PSK/WPA2-PSK.
+
+Before running the test, configure the AP to enable WPA-PSK/WPA2-PSK
+protection, and set the key to "12345678".
+
+	$ ifconfig wlan0 down
+	$ vi /etc/wpa_supplicant.conf
+
+	ctrl_interface=/var/run/wpa_supplicant
+
+	network={
+		ssid="test-ap"
+		psk="12345678"
+	}
+
+	$ ifconfig wlan0 up
+	$ wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant.conf
+	$ ifconfig wlan0 192.168.1.100
+	$ ping 192.168.1.253
+	$ pkill wpa_supplicant
+
+3) Managed mode with WEP.
+
+Before running the test, configure AP to enable WEP, and set the key
+to "12345".
+
+	$ ifconfig wlan0 down
+	$ iwconfig wlan0 essid test-ap
+	$ iwconfig wlan0 key s:12345
+	$ ifconfig wlan0 up 192.168.1.100
+	$ ping 192.168.1.253
+
+4) AD-HOC mode.
+
+Before running the test, configure the portable device with the static ip
+address "192.168.1.2" and use the essid "test".
+
+	$ ifconfig wlan0 down
+	$ iwconfig wlan0 mode ad-hoc
+	$ ifconfig wlan0 up
+	$ iwconfig wlan0 essid test
+	$ ifconfig wlan0 192.168.1.1
+	$ ping 192.168.1.2
+
+5) AP mode.
+
+	$ vi /etc/hostapd.conf
+	interface=wlan0
+	driver=nl80211
+	logger_syslog=-1
+	logger_syslog_level=2
+	logger_stdout=-1
+	logger_stdout_level=2
+	dump_file=/tmp/hostapd.dump
+	ctrl_interface=/var/run/hostapd
+	ctrl_interface_group=0
+	ssid=test
+	country_code=US
+	hw_mode=g
+	channel=11
+	beacon_int=100
+	dtim_period=2
+	max_num_sta=255
+	rts_threshold=2347
+	fragm_threshold=2346
+	macaddr_acl=0
+	auth_algs=3
+	ignore_broadcast_ssid=0
+	wmm_enabled=1
+	wmm_ac_bk_cwmin=4
+	wmm_ac_bk_cwmax=10
+	wmm_ac_bk_aifs=7
+	wmm_ac_bk_txop_limit=0
+	wmm_ac_bk_acm=0
+	wmm_ac_be_aifs=3
+	wmm_ac_be_cwmin=4
+	wmm_ac_be_cwmax=10
+	wmm_ac_be_txop_limit=0
+	wmm_ac_be_acm=0
+	wmm_ac_vi_aifs=2
+	wmm_ac_vi_cwmin=3
+	wmm_ac_vi_cwmax=4
+	wmm_ac_vi_txop_limit=94
+	wmm_ac_vi_acm=0
+	wmm_ac_vo_aifs=2
+	wmm_ac_vo_cwmin=2
+	wmm_ac_vo_cwmax=3
+	wmm_ac_vo_txop_limit=47
+	wmm_ac_vo_acm=0
+	eap_server=0
+	wpa=2
+	wpa_passphrase=12345678
+	wpa_key_mgmt=WPA-PSK
+	wpa_pairwise=TKIP CCMP
+	wpa_group_rekey=600
+	wpa_gmk_rekey=86400
+
+	$ vi /etc/dhcp/dhcpd.conf
+	#
+	# DHCP Server Configuration file.
+	#   see /usr/share/doc/dhcp*/dhcpd.conf.sample
+	#   see 'man 5 dhcpd.conf'
+	# global options
+	ddns-update-style none;   # Dynamic DNS updates are turned off
+	max-lease-time 172800;   # maximum lease time - 2 days
+	default-lease-time 86400;   # seconds till lease expire - 1 day
+
+	subnet 192.168.0.0 netmask 255.255.255.0 {
+		option routers 192.168.0.1;   # default gateway
+		option domain-name-servers 128.224.160.11;   # IP address of the DNS server
+		option subnet-mask 255.255.255.0;   # netmask assigned to clients
+		range 192.168.0.50 192.168.0.149;   # pool of the addresses to lease
+	}
+
+	$ hostapd -B /etc/hostapd.conf
+	$ ifconfig wlan0 192.168.0.1
+	$ dhcpd -cf /etc/dhcp/dhcpd.conf
+	$ echo "1" > /proc/sys/net/ipv4/ip_forward
+	$ iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth0 -j MASQUERADE
+
+Then let the portable device perform a wireless scan to identify the network 
+with essid "test". To access it, use the key "12345678".
+
+6. Bluetooch
+============
+
+6.1 Introduction
+----------------
+Bluetooth functionality is provided by a UART P1011.
+
+6.2 Usage and verification
+--------------------------
+The following drivers must be loaded:
+
+	$ /usr/bin/hciattach /dev/ttyAMA0 bcm43xx 921600 noflow -
+
+Once loaded, the sysfs entry below should appear:
+
+	/sys/module/bluetooth
+
+Device discovery:
+
+	$ hciconfig <BT DEVICE NAME> up
+	$ hciconfig <BT DEVICE NAME> noscan
+	$ hciconfig <BT DEVICE NAME>
+		Expected UP_RUNNING
+	Enable another BT device and ensure it is visable to others.
+	$ hcitool scan --flush
+	$ hciconfig <BT DEVICE NAME> piscan
+
+Service discovery:
+	$ sdptool browse <BT_2_BD_ADDR>
+
+Establish connection:
+
+	$ hcitool dc <BT_ADDR>
+	$ hcitool cc <BT_ADDR>
+	$ hcitool con
+	$ hcitool dc <BT_ADDR>
+
+Ping:
+	$ l2ping -c 5 <BT_ADDR>
+
+6. Creating Partitioned Images(WIC)
+===================================
+
+You can use the OpenEmbedded Image Creator, WIC, to create a properly
+partitioned image on an SD card. The wic command generates partitioned 
+images from existing OpenEmbedded build artifacts.
+Refer to the following URL for more WIC details:
+
+http://www.yoctoproject.org/docs/2.2/mega-manual/mega-manual.html#creating-partitioned-images
+
+This BSP supports disk images for SD cards.
+After building the project, you will have a WIC image under the directory
+tmp/deploy/images/<bsp name>/, for example:
+
+tmp/deploy/images/bcm-2xxx-rpi/wrlinux-image-glibc-small-bcm-2xxx-rpi.wic
+
+You can then write the output image to an SD card.
+
+Since this BSP doesn't have firmware support for reading the u-boot from a 
+partition table, the WIC image only contains kernel, dtb and image. We still 
+need to write the Vendor's firmware and U-boot image to SD card directly, as 
+described in "bootloader/README".
+
+6.1 Burn image to an SD card
+-------------------------
+
+To burn the WIC image to an SD card, please first backup the boot partition content of
+the SD card, which includes the Vendor's firmware and U-boot:
+
+# dd if=/dev/sd_partition_boot of=boot.img
+
+Then execute the following commands:
+
+# dd if=wrlinux-image-glibc-small-bcm-2xxx-rpi.wic of=/dev/your_sd_dev
+# dd if=boot.img of=/dev/sd_partition_boot
+
+6.2 Set u-boot env
+-----------------
+
+The board can boot automatically by setting the following u-boot environment 
+variables:
+
+=> setenv bootfile zImage; setenv fdtfile bcm2710-rpi-3-b.dtb; setenv loadaddr
+1000000; setenv fdtaddr 2000000;
+
+=> setenv bootargs "root=/dev/mmcblk0p2 rw rootdelay=5 earlypritk console=tty0
+console=ttyS0,115200"
+
+=> setenv bootcmd 'ext2load mmc 0:2 $loadaddr /boot/$bootfile; ext2load mmc 0:2
+$fdtaddr /boot/$fdtfile; bootz $loadaddr - $fdtaddr';
+
+=> saveenv; run bootcmd;
+
+
+7. Audio
+========
+
+To enable the audio device, the config.txt should contain 'dtparam=audio=on'.
+
+To load audio driver in WRLinux:
+$ sudo modprobe snd-bcm2835
+
+The following command, entered in the command line, will switch the audio output
+to HDMI:
+
+# amixer cset numid=3 2
+
+Here the output is being set to 2, which is HDMI. Setting the output to 1
+switches to analogue (headphone jack). The default setting is 0 which is
+automatic.
+
+8. Video camera
+===============
+
+The Video camera support on RPI 3 is with V4L2 drivers. To enable the video
+device, the config.txt should contain:
+
+	start_x=1
+	gpu_mem=128
+
+gpu_mem could select others value like 256 or 512.
+
+To load video driver in WRLinux:
+$ sudo modprobe bcm2835-v4l2
+
+9. SPI and I2C
+==============
+
+To enable the SPI and I2C device, some parameters need to set in the config.txt:
+
+Enables SPI driver with 'dtparam=spi=on'
+Enables I2C on GPIO pins with 'dtparam=i2c_arm=on'
+Enables I2S audio hardware with 'dtparam=i2s=on'
