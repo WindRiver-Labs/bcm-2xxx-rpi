@@ -134,7 +134,7 @@ nfsboot=setenv bootargs root=/dev/nfs rw nfsroot=$serverip:$rootpath \
 ip=$ipaddr:$serverip:$gatewayip:$netmask:$hostname:$netdev:off \
 console=$consoledev,$baudrate $othbootargs;tftp $loadaddr $bootfile; \
 tftp $fdtaddr $fdtfile;bootz $loadaddr - $fdtaddr
-bootargs=earlypritk console=tty0 console=ttyS0,115200
+bootargs=earlyprintk console=tty0 console=ttyS0,115200
 usbethaddr=00:04:9F:02:00:FD
 loadaddr=0x1000000
 fdtaddr=0x2000000
@@ -164,16 +164,16 @@ Deploy the kernel image, DTB image and file system image as follows:
 	# cp path_to_bcm2710-rpi-3-b.dtb /mnt/sd/boot
 	# umount /mnt/sd
 
-4.3.2 Set u-boot environment variables and boot from SD card
+4.2.2 Set u-boot environment variables and boot from SD card
 ------------------------------------------------------------
 
 Run the following command to load the kernel image and DTB image:
 
-	=> setenv bootargs earlypritk console=tty0 console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootwait
+	=> setenv bootargs earlyprintk console=tty0 console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootwait
 	=> mmc rescan
 	=> fatload mmc 0 0x1000000 zImage
 	=> fatload mmc 0 0x2000000 bcm2710-rpi-3-b.dtb
-	=> booti 0x1000000 - 0x2000000
+	=> bootz 0x1000000 - 0x2000000
 
 5. WiFi
 =======
@@ -181,7 +181,11 @@ Run the following command to load the kernel image and DTB image:
 5.1 Introduction
 ----------------
 To use this WiFi driver, you will need a microcode (uCode) image.
-The microcode is typically installed in /lib/firmware.
+The microcode is typically installed in /lib/firmware/brcm.
+
+Since the license limitation, the file brcmfmac43430-sdio.txt can obtained from:
+http://git.yoctoproject.org/cgit/cgit.cgi/meta-raspberrypi/plain
+/recipes-kernel/linux-firmware/files/brcmfmac43430-sdio.txt
 
 5.2 Usage and verification
 --------------------------
@@ -250,7 +254,6 @@ address "192.168.1.2" and use the essid "test".
 	logger_syslog_level=2
 	logger_stdout=-1
 	logger_stdout_level=2
-	dump_file=/tmp/hostapd.dump
 	ctrl_interface=/var/run/hostapd
 	ctrl_interface_group=0
 	ssid=test
@@ -320,7 +323,7 @@ address "192.168.1.2" and use the essid "test".
 Then let the portable device perform a wireless scan to identify the network 
 with essid "test". To access it, use the key "12345678".
 
-6. Bluetooch
+6. Bluetooth
 ============
 
 6.1 Introduction
@@ -331,7 +334,7 @@ Bluetooth functionality is provided by a UART P1011.
 --------------------------
 The following drivers must be loaded:
 
-	$ /usr/bin/hciattach /dev/ttyAMA0 bcm43xx 921600 noflow -
+	$ /usr/sbin/hciattach /dev/ttyAMA0 bcm43xx 921600 noflow -
 
 Once loaded, the sysfs entry below should appear:
 
@@ -360,7 +363,7 @@ Establish connection:
 Ping:
 	$ l2ping -c 5 <BT_ADDR>
 
-6. Creating Partitioned Images(WIC)
+7. Creating Partitioned Images(WIC)
 ===================================
 
 You can use the OpenEmbedded Image Creator, WIC, to create a properly
@@ -383,7 +386,7 @@ partition table, the WIC image only contains kernel, dtb and image. We still
 need to write the Vendor's firmware and U-boot image to SD card directly, as 
 described in "bootloader/README".
 
-6.1 Burn image to an SD card
+7.1 Burn image to an SD card
 -------------------------
 
 To burn the WIC image to an SD card, please first backup the boot partition content of
@@ -396,7 +399,7 @@ Then execute the following commands:
 # dd if=wrlinux-image-glibc-small-bcm-2xxx-rpi.wic of=/dev/your_sd_dev
 # dd if=boot.img of=/dev/sd_partition_boot
 
-6.2 Set u-boot env
+7.2 Set u-boot env
 -----------------
 
 The board can boot automatically by setting the following u-boot environment 
@@ -405,7 +408,7 @@ variables:
 => setenv bootfile zImage; setenv fdtfile bcm2710-rpi-3-b.dtb; setenv loadaddr
 1000000; setenv fdtaddr 2000000;
 
-=> setenv bootargs "root=/dev/mmcblk0p2 rw rootdelay=5 earlypritk console=tty0
+=> setenv bootargs "root=/dev/mmcblk0p2 rw rootdelay=5 earlyprintk console=tty0
 console=ttyS0,115200"
 
 => setenv bootcmd 'ext2load mmc 0:2 $loadaddr /boot/$bootfile; ext2load mmc 0:2
@@ -414,7 +417,7 @@ $fdtaddr /boot/$fdtfile; bootz $loadaddr - $fdtaddr';
 => saveenv; run bootcmd;
 
 
-7. Audio
+8. Audio
 ========
 
 To enable the audio device, the config.txt should contain 'dtparam=audio=on'.
@@ -431,7 +434,7 @@ Here the output is being set to 2, which is HDMI. Setting the output to 1
 switches to analogue (headphone jack). The default setting is 0 which is
 automatic.
 
-8. Video camera
+9. Video camera
 ===============
 
 The Video camera support on RPI 3 is with V4L2 drivers. To enable the video
@@ -445,8 +448,8 @@ gpu_mem could select others value like 256 or 512.
 To load video driver in WRLinux:
 $ sudo modprobe bcm2835-v4l2
 
-9. SPI and I2C
-==============
+10. SPI and I2C
+===============
 
 To enable the SPI and I2C device, some parameters need to set in the config.txt:
 
