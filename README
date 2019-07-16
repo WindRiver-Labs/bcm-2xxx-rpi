@@ -3,13 +3,12 @@
 
 1. About this document
 ======================
-This document provides common and non-hardware specific information.
+This document describes the common and non-hardware specific information.
 Please refer to README.hardware for hardware specific information.
 
 Dependencies
 ------------
-This layer depends on the oe-core version supplied with Wind River Linux
-and the wr-kernel layer.
+This layer depends on the oe-core version supplied with linux-yocto kernel.
 
 
 Maintenance
@@ -21,53 +20,60 @@ information on submitting changes.
 
 Building the bcm-2xxx-rpi layer
 -------------------------------
-This layer and the wr-kernel layer should be added to bblayers.conf. 
-
+This layer should be added to bblayers.conf. This is done automatically
+when using the Wind River setup.sh wrapper.
 
 License
 -------
-Copyright (C) 2016 Wind River Systems, Inc.
+Copyright (C) 2019 Wind River Systems, Inc.
 
-The right to copy, distribute or otherwise make use of this software may
-be licensed only pursuant to the terms of an applicable Wind River license
-agreement. No license to Wind River intellectual properly rights is granted
-herein. All rights not licensed by Wind River are reserved by Wind River.
+Source code included in the tree for individual recipes is under the LICENSE
+stated in the associated recipe (.bb file) unless otherwise stated.
 
-Source code included in tree for individual recipes is under the LICENSE
-stated in each recipe (.bb file) unless other stated.
+The metadata is under the following license unless otherwise stated.
 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-2. BSP Kernel and Image Combination
-====================================
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-Supported WindRiver Linux kernel and image combinations for this BSP are
-documented in the following table.
-The leftmost column indicates the kernel type and the top row indicates the
-image type.
-A 'Y' in a content cell indicates support for the combination; 'N' indicates 
-that the combination is not supported:
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 
---------------------------------------------------------------------
-| kernel/image  | glibc-std | glibc-small | glibc-cgl | glibc-tiny |
---------------------------------------------------------------------
-|   standard    |     Y     |      Y      |     N     |     N      |
---------------------------------------------------------------------
-|   preempt_rt  |     Y     |      Y      |     N     |     N      |
---------------------------------------------------------------------
+2. BSP Kernel and Distros
+=========================
 
-Note: With regard to the kernel and image types, please refer to the WindRiver 
-Linux specification for details.
+The following table summarizes the valid Wind River Linux distros for this BSP.
+'Y' in each content cell stands for supported; 'N' stands for not supported:
 
+  +--------------+-------------+-------------+-------------+
+  | valid/distro |   wrlinux   | wrlinux-cgl | wrlinux-ovp |
+  +--------------+-------------+-------------+-------------+
+  |    valid     |      Y      |      Y      |      N      |
+  +--------------+-------------+-------------+-------------+
+
+For the supported kernel type for this BSP, please check the TARGET_SUPPORTED_KTYPES
+by running 'bitbake -e virtual/kernel | grep "^TARGET_SUPPORTED_KTYPES="'.
 
 3. Board Specific Patches
 =========================
 
 To get a list of patches applied to the kernel specific to this BSP
-along with patch descriptions, use 'git whatchanged' on the default
+along with patch descriptions use git whatchanged on the default
 kernel (git whatchanged <kernel_type>..<bsp_name>). For example:
 
-  # bitbake -c devshell virtual/kernel
-  # git whatchanged standard/base..
+	# cd tmp-glibc/work-shared/<bsp_name>/kernel-source
+	# git whatchanged standard/base..HEAD
 
 
 4. Boot Instructions
@@ -82,7 +88,7 @@ To generate the DTB manually, change to the build directory, then run
 the following commands:
 
 	% bitbake -c devshell virtual/kernel
-	% make bcm2710-rpi-3-b.dtb
+	% make broadcom\bcm2710-rpi-3-b-plus.dtb
 
 The dtb can then be found in the
   .../linux-<bsp_name>-<kernel type>-build/arch/arm/boot/dts
@@ -121,7 +127,7 @@ may or may not be present depending on who installed and configured
 u-boot for the board.
 
 The console device for the board is ttyS0 at 115200 baud. For the DTB
-address, 0x2000000 has been used with success by Wind River. The load address
+address, 0x3000000 has been used with success by Wind River. The load address
 must be high enough to not interfere with kernel decompression. A value
 of 0x1000000 was used with success for all kernels tested by Wind River.
 
@@ -133,18 +139,18 @@ Example settings for the monitor (u-boot) are shown below:
 nfsboot=setenv bootargs root=/dev/nfs rw nfsroot=$serverip:$rootpath \
 ip=$ipaddr:$serverip:$gatewayip:$netmask:$hostname:$netdev:off \
 console=$consoledev,$baudrate $othbootargs;tftp $loadaddr $bootfile; \
-tftp $fdtaddr $fdtfile;bootz $loadaddr - $fdtaddr
+tftp $fdtaddr $fdtfile;booti $loadaddr - $fdtaddr
 bootargs=earlyprintk console=tty0 console=ttyS0,115200
 usbethaddr=00:04:9F:02:00:FD
 loadaddr=0x1000000
-fdtaddr=0x2000000
+fdtaddr=0x3000000
 gatewayip=192.168.1.1
 netmask=255.255.255.0
 ipaddr=192.168.1.100
 serverip=192.168.1.2
 netdev=eth0
-bootfile=zImage
-fdtfile=bcm2710-rpi-3-b.dtb
+bootfile=Image
+fdtfile=bcm2710-rpi-3-b-plus.dtb
 rootpath=/tftpboot/rootfs
 
 4.2 Boot from SD card
@@ -160,8 +166,8 @@ Deploy the kernel image, DTB image and file system image as follows:
 	# tar xfj wrlinux-image-glibc-std-bcm-2xxx-rpi.tar.bz2 --numeric-owner -C /mnt/sd
 	# umount /mnt/sd
 	# mount /dev/mmcblk0p1 /mnt/sd
-	# cp path_to_zImage /mnt/sd/boot
-	# cp path_to_bcm2710-rpi-3-b.dtb /mnt/sd/boot
+	# cp path_to_Image /mnt/sd/boot
+	# cp path_to_bcm2710-rpi-3-b-plus.dtb /mnt/sd/boot
 	# umount /mnt/sd
 
 4.2.2 Set u-boot environment variables and boot from SD card
@@ -171,9 +177,9 @@ Run the following command to load the kernel image and DTB image:
 
 	=> setenv bootargs earlyprintk console=tty0 console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootwait
 	=> mmc rescan
-	=> fatload mmc 0 0x1000000 zImage
-	=> fatload mmc 0 0x2000000 bcm2710-rpi-3-b.dtb
-	=> bootz 0x1000000 - 0x2000000
+	=> fatload mmc 0 0x1000000 Image
+	=> fatload mmc 0 0x3000000 bcm2710-rpi-3-b-plus.dtb
+	=> booti 0x1000000 - 0x3000000
 
 5. WiFi
 =======
@@ -183,9 +189,13 @@ Run the following command to load the kernel image and DTB image:
 To use this WiFi driver, you will need a microcode (uCode) image.
 The microcode is typically installed in /lib/firmware/brcm.
 
-Since the license limitation, the file brcmfmac43430-sdio.txt can obtained from:
-http://git.yoctoproject.org/cgit/cgit.cgi/meta-raspberrypi/plain
-/recipes-kernel/linux-firmware/files/brcmfmac43430-sdio.txt
+Since the license limitation, the firmware for 3b+ are here:
+
+wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac43455-sdio.bin
+wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac43455-sdio.clm_blob
+wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac43455-sdio.txt 
+
+Then you need to copy above download files to directory "/lib/firmware/brcm/" of rootfs.
 
 5.2 Usage and verification
 --------------------------
@@ -328,13 +338,19 @@ with essid "test". To access it, use the key "12345678".
 
 6.1 Introduction
 ----------------
-Bluetooth functionality is provided by a UART P1011.
+Bluetooth functionality is provided by a UART P1011. To use this Bluetooth driver,
+you will need a microcode (uCode) image. Since the license limitation, the firmware
+for 3b+ is here:
+
+wget https://github.com/RPi-Distro/bluez-firmware/raw/master/broadcom/BCM4345C0.hcd
+
+Then you need to copy above download file to directory "/lib/firmware/brcm/" of rootfs.
 
 6.2 Usage and verification
 --------------------------
 The following drivers must be loaded:
 
-	$ /usr/sbin/hciattach /dev/ttyAMA0 bcm43xx 921600 noflow -
+	$ /usr/bin/hciattach /dev/ttyAMA0 bcm43xx 921600 noflow -
 
 Once loaded, the sysfs entry below should appear:
 
@@ -366,31 +382,31 @@ Ping:
 7. Creating Partitioned Images(WIC)
 ===================================
 
-You can use the OpenEmbedded Image Creator, WIC, to create a properly
-partitioned image on an SD card. The wic command generates partitioned 
-images from existing OpenEmbedded build artifacts.
-Refer to the following URL for more WIC details:
+User can use the OpenEmbedded Image Creator, wic, to create the properly
+partitioned image on a SD card. The wic command
+generates partitioned images from existing OpenEmbedded build artifacts.
+User can refer to the below URL to get more WIC details:
 
-http://www.yoctoproject.org/docs/2.2/mega-manual/mega-manual.html#creating-partitioned-images
+http://www.yoctoproject.org/docs/2.4/mega-manual/mega-manual.html#creating-partitioned-images-using-wic
 
-This BSP supports disk images for SD cards.
-After building the project, you will have a WIC image under the directory
-tmp/deploy/images/<bsp name>/, for example:
+This BSP supports disk images for SD card.
+After build the project, user will get a WIC image under the directory
+tmp-glibc/deploy/images/<bsp name>/ ,such as:
 
-tmp/deploy/images/bcm-2xxx-rpi/wrlinux-image-glibc-small-bcm-2xxx-rpi.wic
+tmp-glibc/deploy/images/nxp-ls20xx/wrlinux-image-glibc-small-bcm-2xxx-rpi.wic
 
-You can then write the output image to an SD card.
+Then user can write the output image to a SD card:
 
-Since this BSP doesn't have firmware support for reading the u-boot from a 
-partition table, the WIC image only contains kernel, dtb and image. We still 
-need to write the Vendor's firmware and U-boot image to SD card directly, as 
-described in "bootloader/README".
+Since this BSP can not directly integrate the Vendor's necessary series firmwares.
+WIC image only contains kernel, dtb and rootfs. We still need to write back the Vendor's firmware and
+u-boot.bin to the SD card after burning the WIC image.
 
 7.1 Burn image to an SD card
 -------------------------
 
 To burn the WIC image to an SD card, please first backup the boot partition content of
-the SD card, which includes the Vendor's firmware and U-boot:
+the SD card, which includes the Vendor's firmware and u-boot.bin (about how to update u-boot.bin
+plese refer to below chapter "11. Raspberry's pre-built image"):
 
 # dd if=/dev/sd_partition_boot of=boot.img
 
@@ -405,14 +421,14 @@ Then execute the following commands:
 The board can boot automatically by setting the following u-boot environment 
 variables:
 
-=> setenv bootfile zImage; setenv fdtfile bcm2710-rpi-3-b.dtb; setenv loadaddr
-1000000; setenv fdtaddr 2000000;
+=> setenv bootfile Image; setenv fdtfile bcm2710-rpi-3-b-plus.dtb; setenv loadaddr
+1000000; setenv fdtaddr 3000000;
 
 => setenv bootargs "root=/dev/mmcblk0p2 rw rootdelay=5 earlyprintk console=tty0
 console=ttyS0,115200"
 
 => setenv bootcmd 'ext2load mmc 0:2 $loadaddr /boot/$bootfile; ext2load mmc 0:2
-$fdtaddr /boot/$fdtfile; bootz $loadaddr - $fdtaddr';
+$fdtaddr /boot/$fdtfile; booti $loadaddr - $fdtaddr';
 
 => saveenv; run bootcmd;
 
@@ -456,3 +472,50 @@ To enable the SPI and I2C device, some parameters need to set in the config.txt:
 Enables SPI driver with 'dtparam=spi=on'
 Enables I2C on GPIO pins with 'dtparam=i2c_arm=on'
 Enables I2S audio hardware with 'dtparam=i2s=on'
+
+And run the below command to load i2c driver mode:
+
+$ sudo modprobe i2c-dev
+
+11. Raspberry's pre-built image
+===============================
+
+11.1. Raspberry's boot partition
+--------------------------------
+
+This boot partition contains pre-compiled binaries of the
+current Raspberry Pi bootloader/GPU firmware, like start*.elf, fixup*.dat
+and bootcode.bin are the GPU firmwares and bootloader, which are necessary for booting Raspberry Pi
+target board. This firmwares could get picked from the link:
+
+ https://github.com/raspberrypi/firmware/tree/master/boot
+
+and copy above boot directory to the of boot partition prepared SD card, about how to prepare the
+SD card, see the link:
+https://www.raspberrypi.org/documentation/installation/sd-cards.md
+
+11.2. Update u-boot.bin
+-----------------------
+
+The RPi binary firmware can boot U-Boot just like it can boot a downstream kernel.
+As such, you can simply copy u-boot.bin to the boot partition of the SD card.
+
+This u-boot.bin is under the wrlinux built directory: "tmp-glibc/deploy/images/bcm-2xxx-rpi"
+
+Assume here, the SD card has installed with Raspbian firmware, if not please
+refer to:
+https://www.raspberrypi.org/documentation/installation/installing-images/README.md
+
+Update u-boot.bin:
+
+$ mount /dev/sdb1 /mnt/tmp
+$ cp u-boot.bin /mnt/tmp/
+$ echo 'kernel=u-boot.bin' >> /mnt/tmp/config.txt
+$ echo 'enable_uart=1' >> /mnt/tmp/config.txt
+$ echo 'arm_64bit=1' >> /mnt/tmp/config.txt
+$ umount /mnt/tmp
+
+In the commands above, you may need to replace "/dev/sdb1" with a different
+device filename, depending on where your SD card reader shows up. cat
+/proc/partitions should help you locate the correct device filename.
+

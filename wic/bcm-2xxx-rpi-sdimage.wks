@@ -2,5 +2,5 @@
 # long-description: Create a partitioned disk image for bcm-2xxx-rpi
 # The partition is to accommodate kernel, dtb and rootfs.
 
-part /boot --ondisk mmcblk --fstype=vfat --label boot --active --align 4096 --size 100
+part /boot --ondisk mmcblk --fstype=vfat --label boot --active --align 4096 --fixed-size 256M
 part / --source rootfs --ondisk mmcblk --fstype=ext4 --label root --align 4096
