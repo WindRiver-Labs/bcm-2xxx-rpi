@@ -21,7 +21,7 @@ This BSP supports the following boards:
 2. Change History
 =================
 
-  - 2019/09 (LINXPG-25): Wind River Linux 10.18 RCPL10, standard and preempt-rt support
+  - 2019/09 (LINXPG-25): Wind River Linux 10.18 RCPL10, standard support
 		Add the basic support for Raspberry Pi 3 Model B+
 
 

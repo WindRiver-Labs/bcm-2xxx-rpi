@@ -59,11 +59,14 @@ The following table summarizes the valid Wind River Linux distros for this BSP.
   +--------------+-------------+-------------+-------------+
   | valid/distro |   wrlinux   | wrlinux-cgl | wrlinux-ovp |
   +--------------+-------------+-------------+-------------+
-  |    valid     |      Y      |      Y      |      N      |
+  |    valid     |      Y      |      N      |      N      |
   +--------------+-------------+-------------+-------------+
 
 For the supported kernel type for this BSP, please check the TARGET_SUPPORTED_KTYPES
 by running 'bitbake -e virtual/kernel | grep "^TARGET_SUPPORTED_KTYPES="'.
+
+Note: The preempt-rt ktype is not available for this BSP/Machine at this time.
+
 
 3. Board Specific Patches
 =========================
