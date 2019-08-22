@@ -11,7 +11,7 @@ KERNEL_IMAGETYPE = "Image"
 SERIAL_CONSOLE = "115200 ttyS0"
 
 IMAGE_FSTYPES += "tar.bz2 wic wic.bmap"
-WKS_FILE = "bcm-2xxx-rpi-sdimage.wks"
+WKS_FILE ?= "bcm-2xxx-rpi-sdimage.wks"
 IMAGE_INSTALL_append = " kernel-devicetree kernel-image-image"
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot"
 

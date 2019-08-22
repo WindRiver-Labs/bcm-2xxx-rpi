@@ -265,13 +265,13 @@ partitioned image on a SD card. The wic command
 generates partitioned images from existing OpenEmbedded build artifacts.
 User can refer to the below URL to get more WIC details:
 
-http://www.yoctoproject.org/docs/2.4/mega-manual/mega-manual.html#creating-partitioned-images-using-wic
+http://www.yoctoproject.org/docs/2.6/mega-manual/mega-manual.html#creating-partitioned-images-using-wic
 
 This BSP supports disk images for SD card.
 After build the project, user will get a WIC image under the directory
 tmp-glibc/deploy/images/<bsp name>/ ,such as:
 
-tmp-glibc/deploy/images/nxp-ls20xx/wrlinux-image-glibc-small-bcm-2xxx-rpi.wic
+tmp-glibc/deploy/images/bcm-2xxx-rpi/wrlinux-image-glibc-small-bcm-2xxx-rpi.wic
 
 Then user can write the output image to a SD card:
 
@@ -284,7 +284,7 @@ u-boot.bin to the SD card after burning the WIC image.
 
 To burn the WIC image to an SD card, please first backup the boot partition content of
 the SD card, which includes the Vendor's firmware and u-boot.bin (about how to update u-boot.bin
-plese refer to below chapter "11. Raspberry's pre-built image"):
+please refer to below chapter "11. Raspberry's pre-built image"):
 
 # dd if=/dev/sd_partition_boot of=boot.img
 
