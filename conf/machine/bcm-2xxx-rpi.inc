@@ -21,6 +21,7 @@ IMAGE_FSTYPES += "tar.bz2 wic wic.bmap"
 WKS_FILE ?= "bcm-2xxx-rpi-sdimage.wks"
 IMAGE_INSTALL_append = " kernel-devicetree kernel-image-image"
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot"
+do_image_wic[depends] += "u-boot:do_deploy"
 
 # multilib support
 MULTILIBS ?= "multilib:lib32"
