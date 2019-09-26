@@ -1,6 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-SRC_URI_append_bcm-2xxx-rpi = " \
+SRC_URI_append_bcm-2xxx-rpi4 = " \
     file://0001-bcm43xx-Add-bcm43xx-3wire-variant.patch \
     file://0002-bcm43xx-The-UART-speed-must-be-reset-after-the-firmw.patch \
     file://0003-Increase-firmware-load-timeout-to-30s.patch \
@@ -8,7 +8,7 @@ SRC_URI_append_bcm-2xxx-rpi = " \
     file://brcm43438.service \
     "
 
-do_install_append_bcm-2xxx-rpi() {
+do_install_append_bcm-2xxx-rpi4() {
 
     if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
         install -d ${D}${systemd_unitdir}/system
@@ -16,4 +16,4 @@ do_install_append_bcm-2xxx-rpi() {
     fi
 }
 
-SYSTEMD_SERVICE_${PN}_append_raspberrypi3 = " brcm43438.service"
+SYSTEMD_SERVICE_${PN}_append_raspberrypi4 = " brcm43438.service"
