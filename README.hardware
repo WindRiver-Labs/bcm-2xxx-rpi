@@ -1,4 +1,4 @@
-		Raspberry Pi 3 Board Support Package
+		Raspberry Pi Board Support Package
 
 
 Table of Contents
@@ -15,15 +15,14 @@ Table of Contents
 
 This BSP supports the following boards:
 
-  + Raspberry Pi 3 Model B+: BCM2837B0
+  + Raspberry Pi 4 Model B: BCM2711
 
 
 2. Change History
 =================
 
-  - 2019/09 (LINXPG-25): Wind River Linux 10.18 RCPL10, standard support
-		Add the basic support for Raspberry Pi 3 Model B+
-
+  - 2019/10 (LINXPG-100): WindRiver CI/CD branch support, support Raspberry Pi 4 Model B board
+			  based on Yocto Community kernel
 
 3. BSP Features
 ===============
@@ -83,7 +82,7 @@ The following features are not supported and validated:
 This BSP is only validated in following environment. If you use this BSP
 in a different environment it may possibly have some issues.
 
-	Processor:              BCM2837B0 (Cortex-A53)
+	Processor:              BCM2711 (Cortex-A72)
 	BootLoader:             Raspberry bootloader/GPU firmware and U-Boot
 	BootLoader Version:     Raspberry bootloader/GPU firmware contains in 2019-07-10-raspbian-buster-lite.img or
 	                        raspberrypi/firmware Release version "1.20190709"
