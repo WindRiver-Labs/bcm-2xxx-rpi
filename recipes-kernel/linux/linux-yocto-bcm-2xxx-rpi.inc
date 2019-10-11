@@ -14,5 +14,6 @@ do_compile_append_rpi() {
     fi
 }
 
+KERNEL_VERSION_SANITY_SKIP = "1"
 SRCREV_machine_rpi ?= "${AUTOREV}"
 SRCREV_meta_rpi ?= "${AUTOREV}"
