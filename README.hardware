@@ -44,12 +44,13 @@ the corresponding h/w features exist.
 
   o Network
 
-	+ Ethernet Port: one smsc95xx USB 2.0 Ethernet
-	+ WIFI: BCM43455 SDIO
+	+ Ethernet: Gigabit Ethernet
+	+ WIFI: 2.4 GHz and 5.0 GHz IEEE 802.11ac wireless
 
   o Storage
 	+ SD: BCM2837 sdhost
-	+ USB2: 4 USB ports
+	+ USB2: 2 USB ports
+	+ USB3: 2 USB ports
 
   o Multimedia:
         + HDMI: one HDMI port on board
@@ -63,7 +64,7 @@ the corresponding h/w features exist.
 		and not have the following capabilities: Break detection &
 		Framing errors detection & Parity bit & DCD, DSR, DTR or RI
 		signals.
-	+ Bluetooth: BCM4345C0 (multiplexing with UART pl011)
+	+ Bluetooth: Bluetooth 5.0, BLE (multiplexing with UART pl011)
 	+ Watchdog: On-Chip H/W Watchdog
 
 3.2 Unsupported Features
