@@ -20,7 +20,11 @@ inherit deploy nopackages
 
 do_deploy() {
     install -d ${DEPLOYDIR}
-    install -m 0644 boot.scr ${DEPLOYDIR}
+    if ${@bb.utils.contains('DISTRO_FEATURES', 'ostree', 'true', 'false', d)}; then
+        install -m 0644 boot.scr ${DEPLOYDIR}/boot-rpi.scr
+    else
+        install -m 0644 boot.scr ${DEPLOYDIR}
+    fi
 }
 
 addtask do_deploy after do_compile before do_build
