@@ -7,6 +7,8 @@ UBOOT_RPI4_SUPPORT_PATCHES = " \
     file://0005-arm-bcm283x-Include-definition-for-additional-emmc-c.patch \
     file://0006-mmc-bcm2835_sdhci-Add-support-for-bcm2711-device.patch \
     file://0007-rpi-Add-memory-map-for-bcm2838.patch \
+    file://0001-rpi_4-defconfigs-Add-CONFIG_CMD_BOOT-menu.patch \
+    file://0002-rpi.h-Add-ostree-default-variables.patch \
 "
 
 SRC_URI_append_raspberrypi4 = "${UBOOT_RPI4_SUPPORT_PATCHES}"

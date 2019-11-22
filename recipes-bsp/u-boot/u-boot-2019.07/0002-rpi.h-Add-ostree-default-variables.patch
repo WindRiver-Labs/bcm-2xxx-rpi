@@ -1,0 +1,36 @@
+From 3569bbc5bee3643f10510e2875dc451539ef5079 Mon Sep 17 00:00:00 2001
+From: Jason Wessel <jason.wessel@windriver.com>
+Date: Thu, 21 Nov 2019 20:11:51 -0800
+Subject: [PATCH 2/2] rpi.h: Add ostree default variables
+
+The ostree configuration requires several additional default variables
+to be configured in the environment to properly boot the first time
+before there is a saved environment file.
+
+Upstream-Status: Inappropriate [ ostree specific ]
+
+Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
+---
+ include/configs/rpi.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/include/configs/rpi.h b/include/configs/rpi.h
+index f76c7d18ef0..8d03e71a140 100644
+--- a/include/configs/rpi.h
++++ b/include/configs/rpi.h
+@@ -182,6 +182,12 @@
+ 
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+ 	"dhcpuboot=usb start; dhcp u-boot.uimg; bootm\0" \
++	"use_fdtdtb=2\0" \
++	"initrd_addr=0x03000000\0" \
++	"console=ttyS0\0" \
++	"baudrate=115200\0" \
++	"loadaddr=0x00080000\0" \
++	"mmcdev=0\0" \
+ 	ENV_DEVICE_SETTINGS \
+ 	ENV_MEM_LAYOUT_SETTINGS \
+ 	BOOTENV
+-- 
+2.23.0
+
