@@ -265,52 +265,11 @@ tmp-glibc/deploy/images/<bsp name>/, such as:
 
 tmp-glibc/deploy/images/bcm-2xxx-rpi4/wrlinux-image-std-bcm-2xxx-rpi4.wic
 
-Note:
-Because the license limitation, there is no bootloader and Vendor's firmwares
-in wic image. It only contains kernel, dtb and rootfs. So, it is needed to burn bootloader
-and the Vendor's firmware into SD card after burning the WIC image.
-Detail steps as below:
-
-7.1 Burn wic image
-------------------
-
-To burn the WIC image to an SD card, run below command
-
-	# sudo dd if=wrlinux-image-glibc-small-bcm-2xxx-rpi.wic of=/dev/<your_sd_dev> conv=fsync
-
-7.2 Burn bootloader and Vendor's firmware
------------------------------------------
-
-7.2.1 Mount boot partition
--------------------------
-
-	# sudo mount /dev/<boot-partition>/ /mnt
-
-
-7.2.2 Get bootloader and Vendor's firmwares
--------------------------------------------
-
-	# wget https://github.com/raspberrypi/firmware/archive/d36bde339b067bf13b610fd9741d6351c1dafc38.tar.gz
-	# tar zxvf d36bde339b067bf13b610fd9741d6351c1dafc38.tar.gz
-
-7.2.3 Copy bootloader and Vendor's firmwares
---------------------------------------------
-
-	# sudo cp firmware-d36bde339b067bf13b610fd9741d6351c1dafc38/boot/bootcode.bin /mnt
-	# sudo cp firmware-d36bde339b067bf13b610fd9741d6351c1dafc38/boot/*.dat /mnt
-	# sudo cp firmware-d36bde339b067bf13b610fd9741d6351c1dafc38/boot/*.elf /mnt
-
-7.2.4 Unmount boot partiton
--------------------------
-
-	# sudo umount /mnt
-
-7.3 Run wic image
+7.1 Run wic image
 -----------------
 
 Insert the SD card into SD slot on Raspberrypi 4b board, and then power on.
 Default boot commands and parameters work fine, there is no need to set them again.
-
 
 8. Audio
 ========
