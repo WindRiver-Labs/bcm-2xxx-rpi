@@ -16,9 +16,9 @@ do_deploy () {
 	install -d ${DEPLOYDIR}
 	cp ${WORKDIR}/config.txt ${DEPLOYDIR}/config.txt
 	if ${@bb.utils.contains('DISTRO_FEATURES', 'ostree', 'true', 'false', d)}; then
-		cp ${WORKDIR}/cmdline.txt ${DEPLOYDIR}/cmdline.txt
-	else
 		cp ${WORKDIR}/cmdline-ostree.txt ${DEPLOYDIR}/cmdline.txt
+	else
+		cp ${WORKDIR}/cmdline.txt ${DEPLOYDIR}/cmdline.txt
 	fi
 }
 
