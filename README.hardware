@@ -21,8 +21,9 @@ This BSP supports the following boards:
 2. Change History
 =================
 
-  - 2019/10 (LINXPG-100): WindRiver CI/CD branch support, support Raspberry Pi 4 Model B board
+  - 2019/10 (LINUXPG-100): WindRiver CI/CD branch support, support Raspberry Pi 4 Model B board
 			  based on Yocto Community kernel
+  - 2020/02 (LINUXPG-249): WindRiver Linux LTS1019, support Raspberry Pi 4 Model B board, full features.
 
 3. BSP Features
 ===============
@@ -54,10 +55,9 @@ the corresponding h/w features exist.
 
   o Multimedia:
         + HDMI: one HDMI port on board
-
         + AUDIO: the 3.5in jack connector on board or through HDMI.
-
         + Camera: Video camera support with V4L2 controller
+        + GPU: V3D 3.3 and 4.1 OpenGL ES
 
   o Misc Devices
 	+ UART: mini uart to use as external gpio expansion board.

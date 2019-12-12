@@ -332,3 +332,60 @@ Enables I2S audio hardware with 'dtparam=i2s=on'
 And run the below command to load i2c driver mode:
 
 $ sudo modprobe i2c-dev
+
+11. Graphics Layer
+==================
+
+This layer includes recipes of graphic and multimedia feature.
+If customer wants to enable GPU hardware accelerator, please add this
+layer before building image. With this layer, customer can get a
+image with matchbox desktop based on x11 protocol.
+
+The following descripion show how to use the graphics layer.
+
+11.1 Setup project with distro wrlinux-graphics
+----------------------------------------------
+
+Detail command as below:
+
+	# <path-of-wrlinux-x>/setup.sh --machine bcm-2xxx-rpi4 --distro wrlinux-graphics --dl-layers --all-layers --accept-eula=yes
+
+11.2 Add Graphics Layer
+-----------------------
+
+Run below command to add the graphics layer
+
+	# cd <path-of-project>
+	# . environment-setup-x86_64-wrlinuxsdk-linux
+	# . oe-init-build-env
+	# bitbake-layers add-layer <path-of-bsplayer>/rpi-graphics
+
+11.3 Build Image
+----------------
+
+During building project, there will some packages needing to be downloaded.
+So, firstly, it is need to enable network by setting BB_NO_NETWORK as '0' in <path-of-project>/build/conf/local.conf file.
+And then run below command to build image
+
+	# bitbake wrlinux-image-glibc-std
+
+11.4 Verify Graphic feature
+---------------------------
+
+Connect with HDMI0 port(J6), mode 1680x1050@60.0
+Run below command:
+
+	# es2gears_x11
+
+Output as below:
+
+	EGL_VERSION = 1.4
+	vertex shader info:
+	fragment shader info:
+	info:
+	303 frames in 5.0 seconds = 60.503 FPS
+	300 frames in 5.0 seconds = 59.964 FPS
+	300 frames in 5.0 seconds = 59.952 FPS
+	300 frames in 5.0 seconds = 59.952 FPS
+	300 frames in 5.0 seconds = 59.952 FPS
+	300 frames in 5.0 seconds = 59.952 FPS
