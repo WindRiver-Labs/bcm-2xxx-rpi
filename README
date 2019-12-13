@@ -363,8 +363,11 @@ Run below command to add the graphics layer
 11.3 Build Image
 ----------------
 
-During building project, there will some packages needing to be downloaded.
-So, firstly, it is need to enable network by setting BB_NO_NETWORK as '0' in <path-of-project>/build/conf/local.conf file.
+During building project, there will be some packages needing to be downloaded and some of them need license flag.
+So, firstly, it is need to do below modification in <path-of-project>/build/conf/local.conf file.
+ - set BB_NO_NETWORK as '0'
+ - add LICENSE_FLAGS_WHITELIST = "commercial"
+
 And then run below command to build image
 
 	# bitbake wrlinux-image-glibc-std
