@@ -58,6 +58,7 @@ the corresponding h/w features exist.
         + AUDIO: the 3.5in jack connector on board or through HDMI.
         + Camera: Video camera support with V4L2 controller
         + GPU: V3D 3.3 and 4.1 OpenGL ES
+        + LCD: 7 inch HDMI LCD Display-B with resolution 800x480 and capacitive touch control
 
   o Misc Devices
 	+ UART: mini uart to use as external gpio expansion board.

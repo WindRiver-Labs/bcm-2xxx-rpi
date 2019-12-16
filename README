@@ -392,3 +392,17 @@ Output as below:
 	300 frames in 5.0 seconds = 59.952 FPS
 	300 frames in 5.0 seconds = 59.952 FPS
 	300 frames in 5.0 seconds = 59.952 FPS
+
+12. LCD
+=======
+
+Raspberrypi4 B platform supports 7 inch HDMI LCD Display-B with
+resolution 800x480 and capacitive touch control. To enable LCD feature,
+it is need to add below configuration parameter in config.txt file.
+
+	hdmi_force_hotplug=1
+	max_usb_current=1
+	hdmi_group=2
+	hdmi_mode=1
+	hdmi_mode=87
+	hdmi_cvt 800 480 60 6 0 0 0
