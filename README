@@ -199,6 +199,12 @@ wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac4345
 
 Then you need to copy above download files to directory "/lib/firmware/brcm/" of rootfs.
 
+Note: Because WIFI driver loads the configure file named with the specific board information,
+      create a link file named brcmfmac43455-sdio.raspberrypi,4-model-b.txt with below command
+      to avoid outputing error log when system boots up.
+
+	# ln -s brcmfmac43455-sdio.txt brcmfmac43455-sdio.raspberrypi,4-model-b.txt
+
 5.2 Usage and verification
 --------------------------
 
