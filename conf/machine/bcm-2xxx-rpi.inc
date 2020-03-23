@@ -16,10 +16,8 @@ SERIAL_CONSOLE = "115200 ttyS0"
 
 # wic
 WIC_CREATE_EXTRA_ARGS = "--no-fstab-update"
-MACHINE_EXTRA_RRECOMMENDS = " kernel-modules kernel-devicetree"
 IMAGE_FSTYPES += "tar.bz2 wic wic.bmap ext4"
 WKS_FILE ?= "bcm-2xxx-rpi-sdimage.wks"
-IMAGE_INSTALL += "kernel-devicetree kernel-image-image"
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot"
 do_image_wic[depends] += "u-boot:do_deploy"
 

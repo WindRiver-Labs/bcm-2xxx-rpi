@@ -1188,10 +1188,18 @@ dtparam=audio=on
 ##     Default 35.
 ##
 #dtparam=pwr_led_gpio=35
+[pi3]
+dtparam=i2c_arm=on
+dtparam=spi=on
+avoid_warnings=1
+
+[all]
+disable_splash=1
 # Enable UART
 enable_uart=1
 # Enable VC4 Graphics
 dtoverlay=vc4-fkms-v3d
+kernel=kernel8.img
 
 # Force arm in 64bit mode. See: https://github.com/raspberrypi/firmware/issues/1193.
 arm_64bit=1
