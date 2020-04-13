@@ -7,4 +7,4 @@ PACKAGECONFIG_append_rpi = "${@bb.utils.contains('MACHINE_FEATURES', 'vc4graphic
 
 PACKAGECONFIG_GL_rpi = "egl gles2"
 
-PACKAGECONFIG[dispmanx] = "--enable-dispmanx,--disable-dispmanx,userland"
+PACKAGECONFIG[dispmanx] = ",,userland"
