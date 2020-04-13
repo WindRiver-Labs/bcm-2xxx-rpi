@@ -217,7 +217,7 @@ Execute the following commands to validate the WIFI eature:
 ----------------
 Bluetooth functionality is provided by a UART P1011. To use this Bluetooth driver,
 you will need a microcode (uCode) image. Since the license limitation, the firmware
-for 3b+ is here:
+for Raspberry pi4 is here:
 
 wget https://github.com/RPi-Distro/bluez-firmware/raw/master/broadcom/BCM4345C0.hcd
 
