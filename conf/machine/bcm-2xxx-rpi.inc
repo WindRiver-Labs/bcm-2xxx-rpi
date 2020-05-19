@@ -17,7 +17,7 @@ SERIAL_CONSOLE = "115200 ttyS0"
 # wic
 WIC_CREATE_EXTRA_ARGS = "--no-fstab-update"
 MACHINE_EXTRA_RRECOMMENDS = " kernel-modules kernel-devicetree"
-IMAGE_FSTYPES += "tar.bz2 wic wic.bmap"
+IMAGE_FSTYPES += "tar.bz2 wic wic.bmap ext4"
 WKS_FILE ?= "bcm-2xxx-rpi-sdimage.wks"
 IMAGE_INSTALL_append = " kernel-devicetree kernel-image-image"
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot"
@@ -76,3 +76,31 @@ def make_dtb_boot_files(d):
             return '{};{}'.format(base, dtb)
 
     return ' '.join([transform(dtb) for dtb in alldtbs.split(' ') if dtb])
+
+
+
+# For runqemu, these settings are from qemuarm64
+IMAGE_CLASSES += "qemuboot"
+
+EXTRA_IMAGEDEPENDS += "qemu-native qemu-helper-native"
+
+QB_SYSTEM_NAME = "qemu-system-aarch64"
+QB_MACHINE = "-machine virt"
+QB_CPU = "-cpu cortex-a57"
+QB_CPU_KVM = "-cpu host -machine gic-version=3"
+# Standard Serial console
+QB_KERNEL_CMDLINE_APPEND = "console=ttyAMA0"
+QB_DEFAULT_KERNEL = "Image"
+# For graphics to work we need to define the VGA device as well as the necessary USB devices
+QB_OPT_APPEND = "-show-cursor -device VGA,edid=on"
+QB_OPT_APPEND += "-device qemu-xhci -device usb-tablet -device usb-kbd"
+# Add the 'virtio-rng-pci' device otherwise the guest may run out of entropy
+QB_OPT_APPEND += "-object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0"
+# Virtio Networking support
+QB_TAP_OPT = "-netdev tap,id=net0,ifname=@TAP@,script=no,downscript=no"
+QB_NETWORK_DEVICE = "-device virtio-net-device,netdev=net0,mac=@MAC@"
+# Virtio block device
+QB_ROOTFS_OPT = "-drive id=disk0,file=@ROOTFS@,if=none,format=raw -device virtio-blk-device,drive=disk0"
+# Virtio serial console
+QB_SERIAL_OPT = "-device virtio-serial-device -chardev null,id=virtcon -device virtconsole,chardev=virtcon"
+QB_TCPSERIAL_OPT = "-device virtio-serial-device -chardev socket,id=virtcon,port=@PORT@,host=127.0.0.1 -device virtconsole,chardev=virtcon"
