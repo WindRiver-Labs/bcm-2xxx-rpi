@@ -9,10 +9,17 @@ INHIBIT_DEFAULT_DEPS = "1"
 
 SRC_URI = "file://boot.cmd.in"
 
+EXTERNAL_BOOT_CMD_IN ??= ""
 do_compile() {
-    sed -e 's/@@KERNEL_IMAGETYPE@@/${KERNEL_IMAGETYPE}/' \
-        -e 's/@@KERNEL_BOOTCMD@@/${KERNEL_BOOTCMD}/' \
-        "${WORKDIR}/boot.cmd.in" > "${WORKDIR}/boot.cmd"
+    if [ -n "${EXTERNAL_BOOT_CMD_IN}" -a -f "${EXTERNAL_BOOT_CMD_IN}" ]; then
+        sed -e 's/@@KERNEL_IMAGETYPE@@/${KERNEL_IMAGETYPE}/' \
+            -e 's/@@KERNEL_BOOTCMD@@/${KERNEL_BOOTCMD}/' \
+            "${EXTERNAL_BOOT_CMD_IN}" > "${WORKDIR}/boot.cmd"
+    else
+        sed -e 's/@@KERNEL_IMAGETYPE@@/${KERNEL_IMAGETYPE}/' \
+            -e 's/@@KERNEL_BOOTCMD@@/${KERNEL_BOOTCMD}/' \
+            "${WORKDIR}/boot.cmd.in" > "${WORKDIR}/boot.cmd"
+    fi
     mkimage -A arm -T script -C none -n "Boot script" -d "${WORKDIR}/boot.cmd" boot.scr
 }
 
