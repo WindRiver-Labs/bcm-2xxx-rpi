@@ -1,0 +1,37 @@
+Provide a nicer message when the distro_bootcmd executes a continue.
+
+Upstream-Status: Inappropriate [ostree specific]
+
+Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
+---
+ configs/rpi_arm64_defconfig     |    1 +
+ include/config_distro_bootcmd.h |    4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+--- a/configs/rpi_arm64_defconfig
++++ b/configs/rpi_arm64_defconfig
+@@ -51,3 +51,4 @@ CONFIG_PHYS_TO_BUS=y
+ CONFIG_OF_LIBFDT_OVERLAY=y
+ CONFIG_MENU=y
+ CONFIG_CMD_BOOTMENU=y
++CONFIG_CMD_BOOTCOMMAND="run bootcmd_mmc0"
+--- a/include/config_distro_bootcmd.h
++++ b/include/config_distro_bootcmd.h
+@@ -433,7 +433,7 @@
+ 				"${prefix}${boot_syslinux_conf}; then "   \
+ 			"echo Found ${prefix}${boot_syslinux_conf}; "     \
+ 			"run boot_extlinux; "                             \
+-			"echo SCRIPT FAILED: continuing...; "             \
++			"echo SCRIPT EXITED: continuing...; "             \
+ 		"fi\0"                                                    \
+ 	\
+ 	"boot_a_script="                                                  \
+@@ -449,7 +449,7 @@
+ 				"echo Found U-Boot script "               \
+ 					"${prefix}${script}; "            \
+ 				"run boot_a_script; "                     \
+-				"echo SCRIPT FAILED: continuing...; "     \
++				"echo SCRIPT EXITED: continuing...; "     \
+ 			"fi; "                                            \
+ 		"done\0"                                                  \
+ 	\

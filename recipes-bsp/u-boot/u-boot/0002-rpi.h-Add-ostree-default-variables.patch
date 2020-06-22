@@ -11,14 +11,12 @@ Upstream-Status: Inappropriate [ ostree specific ]
 
 Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
 ---
- include/configs/rpi.h | 6 ++++++
+ include/configs/rpi.h |    6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/include/configs/rpi.h b/include/configs/rpi.h
-index f76c7d18ef0..8d03e71a140 100644
 --- a/include/configs/rpi.h
 +++ b/include/configs/rpi.h
-@@ -182,6 +182,12 @@
+@@ -206,6 +206,12 @@
  
  #define CONFIG_EXTRA_ENV_SETTINGS \
  	"dhcpuboot=usb start; dhcp u-boot.uimg; bootm\0" \

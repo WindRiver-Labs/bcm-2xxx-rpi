@@ -10,30 +10,32 @@ Upstream-Status: Inappropriate [wr-ostree specific]
 
 Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
 ---
- configs/rpi_4_32b_defconfig | 2 ++
- configs/rpi_4_defconfig     | 2 ++
- 2 files changed, 4 insertions(+)
+ configs/rpi_4_32b_defconfig |    2 ++
+ configs/rpi_4_defconfig     |    2 ++
+ configs/rpi_arm64_defconfig |    2 ++
+ 3 files changed, 6 insertions(+)
 
-diff --git a/configs/rpi_4_32b_defconfig b/configs/rpi_4_32b_defconfig
-index a31a617a5fb..d7e8208aa8e 100644
 --- a/configs/rpi_4_32b_defconfig
 +++ b/configs/rpi_4_32b_defconfig
-@@ -31,3 +31,5 @@ CONFIG_SYS_WHITE_ON_BLACK=y
+@@ -33,3 +33,5 @@ CONFIG_SYS_WHITE_ON_BLACK=y
  CONFIG_CONSOLE_SCROLL_LINES=10
  CONFIG_PHYS_TO_BUS=y
  CONFIG_OF_LIBFDT_OVERLAY=y
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
-diff --git a/configs/rpi_4_defconfig b/configs/rpi_4_defconfig
-index da8c960a2a1..2c4ea708e47 100644
 --- a/configs/rpi_4_defconfig
 +++ b/configs/rpi_4_defconfig
-@@ -31,3 +31,5 @@ CONFIG_SYS_WHITE_ON_BLACK=y
+@@ -33,3 +33,5 @@ CONFIG_SYS_WHITE_ON_BLACK=y
  CONFIG_CONSOLE_SCROLL_LINES=10
  CONFIG_PHYS_TO_BUS=y
  CONFIG_OF_LIBFDT_OVERLAY=y
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
--- 
-2.23.0
-
+--- a/configs/rpi_arm64_defconfig
++++ b/configs/rpi_arm64_defconfig
+@@ -42,3 +42,5 @@ CONFIG_SYS_WHITE_ON_BLACK=y
+ CONFIG_CONSOLE_SCROLL_LINES=10
+ CONFIG_PHYS_TO_BUS=y
+ CONFIG_OF_LIBFDT_OVERLAY=y
++CONFIG_MENU=y
++CONFIG_CMD_BOOTMENU=y

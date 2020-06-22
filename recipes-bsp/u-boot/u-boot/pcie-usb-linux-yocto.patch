@@ -1,0 +1,21 @@
+The PCIE device in the WR kernel is different than the
+meta-raspberrypi kernel.
+
+Upstream-Status: Inappropriate [wr-patch specific]
+
+Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
+
+---
+ drivers/pci/pcie_brcmstb.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/drivers/pci/pcie_brcmstb.c
++++ b/drivers/pci/pcie_brcmstb.c
+@@ -609,6 +609,7 @@ static const struct dm_pci_ops brcm_pcie
+ 
+ static const struct udevice_id brcm_pcie_ids[] = {
+ 	{ .compatible = "brcm,bcm2711-pcie" },
++	{ .compatible = "brcm,bcm7211-pcie" },
+ 	{ }
+ };
+ 
