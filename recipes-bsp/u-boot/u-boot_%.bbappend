@@ -18,7 +18,31 @@ UBOOT_RPI4_SUPPORT_PATCHES = " \
     file://0002-rpi.h-Add-ostree-default-variables.patch \
     file://boot_cmd.patch \
     file://pcie-usb-linux-yocto.patch \
+    file://0001-fs-fat-fat.c-Do-not-perform-zero-block-reads-if-ther.patch \
+    file://0001-qemu-arm64-Defaults-for-booting-with-ostree.patch \
 "
 
 SRC_URI_append_raspberrypi4 = "${UBOOT_RPI4_SUPPORT_PATCHES}"
 
+# Also build a specfic qemu-u-boot.bin
+
+do_configure_append_rpi() {
+    rm -rf ${B}-qemu
+    mkdir -p ${B}-qemu
+    oe_runmake -C ${S} O=${B}-qemu qemu_arm64_config
+}
+
+do_compile_append_rpi() {
+    echo ${UBOOT_LOCALVERSION} > ${B}-qemu/.scmversion
+    oe_runmake -C ${S} O=${B}-qemu ${UBOOT_MAKE_TARGET}
+}
+
+do_deploy_append_rpi() {
+    ocwd=$PWD
+    install -D -m 644 ${B}-qemu/${UBOOT_BINARY} ${DEPLOYDIR}/qemu-${UBOOT_IMAGE}
+    cd ${DEPLOYDIR}
+    rm -f qemu-${UBOOT_BINARY} qemu-${UBOOT_SYMLINK}
+    ln -sf qemu-${UBOOT_IMAGE} qemu-${UBOOT_SYMLINK}
+    ln -sf qemu-${UBOOT_IMAGE} qmeu-${UBOOT_BINARY}
+    cd $ocwd
+}

@@ -86,6 +86,7 @@ QB_SYSTEM_NAME = "qemu-system-aarch64"
 QB_MACHINE = "-machine virt"
 QB_CPU = "-cpu cortex-a57"
 QB_CPU_KVM = "-cpu host -machine gic-version=3"
+QB_DRIVE_TYPE = "/dev/vdb"
 # Standard Serial console
 QB_KERNEL_CMDLINE_APPEND = "console=ttyAMA0"
 QB_DEFAULT_KERNEL = "Image"
