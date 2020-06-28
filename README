@@ -191,7 +191,7 @@ For Raspberrypi4, please use below commands
 To use this WiFi driver, you will need a microcode (uCode) image.
 The microcode is typically installed in /lib/firmware/brcm.
 
-Since the license limitation, the firmware for 3b+ are here:
+Since the license limitation, the firmware for rpi4 are here:
 
 wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac43455-sdio.bin
 wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac43455-sdio.clm_blob
@@ -311,7 +311,7 @@ automatic.
 9. Video camera
 ===============
 
-The Video camera support on RPI 3 is with V4L2 drivers. To enable the video
+The Video camera support on RPI 4 is with V4L2 drivers. To enable the video
 device, the config.txt should contain:
 
 	start_x=1
@@ -376,7 +376,7 @@ So, firstly, it is need to do below modification in <path-of-project>/build/conf
 
 And then run below command to build image
 
-	# bitbake wrlinux-image-glibc-std
+	# bitbake wrlinux-image-std-sato
 
 11.4 Verify Graphic feature
 ---------------------------
