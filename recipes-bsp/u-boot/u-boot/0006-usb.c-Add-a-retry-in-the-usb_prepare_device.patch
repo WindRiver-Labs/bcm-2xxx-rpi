@@ -1,0 +1,49 @@
+From 60bcdf7c51ab48f7fe6d2829bf3da1a2768de288 Mon Sep 17 00:00:00 2001
+From: Jason Wessel <jason.wessel@windriver.com>
+Date: Tue, 30 Jun 2020 19:49:06 -0700
+Subject: [PATCH 6/6] usb.c: Add a retry in the usb_prepare_device()
+
+I have found through testing some USB 2 composite mouse/keyboard
+devices do not response to the usb_set_address call immediately
+following the port reset.  It can take anywhere from 2ms to 20ms.
+
+This patch adds a retry and delay for usb_prepare_device() and allows
+all the USB keyboards I tried to function properly.
+
+Upstream-Status: Pending
+
+Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
+---
+ common/usb.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/common/usb.c b/common/usb.c
+index 0eb5d40a2d..39bae86a11 100644
+--- a/common/usb.c
++++ b/common/usb.c
+@@ -1032,6 +1032,7 @@ static int usb_prepare_device(struct usb_device *dev, int addr, bool do_read,
+ 			      struct usb_device *parent)
+ {
+ 	int err;
++	int retry_msec = 0;
+ 
+ 	/*
+ 	 * Allocate usb 3.0 device context.
+@@ -1054,6 +1055,14 @@ static int usb_prepare_device(struct usb_device *dev, int addr, bool do_read,
+ 	dev->devnum = addr;
+ 
+ 	err = usb_set_address(dev); /* set address */
++	/* Retry for old composite keyboard/mouse usb2 hardware */
++	while (err < 0 && retry_msec <= 40) {
++		retry_msec += 20;
++		mdelay(20);
++		err = usb_set_address(dev); /* set address */
++	}
++	if (retry_msec > 0)
++		debug("usb_set_address delay: %i\n", retry_msec);
+ 	if (err < 0)
+ 		debug("\n       usb_set_address return < 0\n");
+ 	if (err < 0 && dev->status != 0) {
+-- 
+2.17.1
+

@@ -20,6 +20,12 @@ UBOOT_RPI4_SUPPORT_PATCHES = " \
     file://pcie-usb-linux-yocto.patch \
     file://0001-fs-fat-fat.c-Do-not-perform-zero-block-reads-if-ther.patch \
     file://0001-qemu-arm64-Defaults-for-booting-with-ostree.patch \
+    file://0001-xhci-Add-polling-support-for-USB-keyboards.patch \
+    file://0002-usb_kbd-Do-not-fail-the-keyboard-if-it-does-not-have.patch \
+    file://0003-common-usb.c-Work-around-keyboard-reporting-USB-devi.patch \
+    file://0004-xhci-ring.c-Add-the-poll_pend-state-to-properly-abor.patch \
+    file://0005-xhci-ring-Fix-crash-when-issuing-usb-reset.patch \
+    file://0006-usb.c-Add-a-retry-in-the-usb_prepare_device.patch \
 "
 
 SRC_URI_append_raspberrypi4 = "${UBOOT_RPI4_SUPPORT_PATCHES}"

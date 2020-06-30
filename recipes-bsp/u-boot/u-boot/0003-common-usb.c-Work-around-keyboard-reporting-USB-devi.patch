@@ -1,0 +1,44 @@
+From cc11f9158101544e7444310917ebfe52083cc0c3 Mon Sep 17 00:00:00 2001
+From: Jason Wessel <jason.wessel@windriver.com>
+Date: Tue, 30 Jun 2020 12:02:33 -0700
+Subject: [PATCH 3/6] common/usb.c: Work around keyboard reporting "USB device
+ not accepting new address"
+
+When resetting the rpi3 board sometimes it will display:
+     USB device not accepting new address (error=0)
+
+After the message appears, the usb keyboard will not work.  It seems
+that the configuration actually did succeed however.  Checking the
+device status for a return code of zero and continuing allows the usb
+keyboard and other usb devices to work function.
+
+Upstream-Status: Pending
+
+Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
+---
+ common/usb.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/common/usb.c b/common/usb.c
+index aad13fd9c5..0eb5d40a2d 100644
+--- a/common/usb.c
++++ b/common/usb.c
+@@ -1054,11 +1054,12 @@ static int usb_prepare_device(struct usb_device *dev, int addr, bool do_read,
+ 	dev->devnum = addr;
+ 
+ 	err = usb_set_address(dev); /* set address */
+-
+-	if (err < 0) {
++	if (err < 0)
++		debug("\n       usb_set_address return < 0\n");
++	if (err < 0 && dev->status != 0) {
+ 		printf("\n      USB device not accepting new address " \
+ 			"(error=%lX)\n", dev->status);
+-		return err;
++			return err;
+ 	}
+ 
+ 	mdelay(10);	/* Let the SET_ADDRESS settle */
+-- 
+2.17.1
+

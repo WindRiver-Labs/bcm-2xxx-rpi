@@ -1,0 +1,57 @@
+From 4c4103cb618595fe9d05362c46be0b347ef81415 Mon Sep 17 00:00:00 2001
+From: Jason Wessel <jason.wessel@windriver.com>
+Date: Tue, 30 Jun 2020 12:23:44 -0700
+Subject: [PATCH 5/6] xhci-ring: Fix crash when issuing "usb reset"
+
+If a "usb reset" is issued when the poll_pend state is set the
+abort_td() function will hit one of the BUG() statements in abort_td()
+or the BUG() statement at the end of xhci_wait_for_event().
+
+The controller has been reset, so the rest of the cleanup should be
+skipped and poll_pend flag should be cleared.
+
+Upstream-Status: Pending
+
+Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
+---
+ drivers/usb/host/xhci-ring.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index d6339f4f0a..f2a07204cd 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -483,6 +483,8 @@ union xhci_trb *xhci_wait_for_event(struct xhci_ctrl *ctrl, trb_type expected,
+ 	if (expected == TRB_TRANSFER)
+ 		return NULL;
+ 
++	if (poll_pend)
++		return NULL;
+ 	printf("XHCI timeout on event type %d... cannot recover.\n", expected);
+ 	BUG();
+ }
+@@ -505,11 +507,16 @@ static void abort_td(struct usb_device *udev, int ep_index)
+ 	xhci_queue_command(ctrl, NULL, udev->slot_id, ep_index, TRB_STOP_RING);
+ 
+ 	event = xhci_wait_for_event(ctrl, TRB_TRANSFER, false);
+-	field = le32_to_cpu(event->trans_event.flags);
+-	BUG_ON(TRB_TO_SLOT_ID(field) != udev->slot_id);
+-	BUG_ON(TRB_TO_EP_INDEX(field) != ep_index);
+-	BUG_ON(GET_COMP_CODE(le32_to_cpu(event->trans_event.transfer_len
+-		!= COMP_STOP)));
++	if (event) {
++		field = le32_to_cpu(event->trans_event.flags);
++		BUG_ON(TRB_TO_SLOT_ID(field) != udev->slot_id);
++		BUG_ON(TRB_TO_EP_INDEX(field) != ep_index);
++		BUG_ON(GET_COMP_CODE(le32_to_cpu(event->trans_event.transfer_len
++						 != COMP_STOP)));
++	} else {
++		debug("XHCI abort timeout\n");
++		return;
++	}
+ 	xhci_acknowledge_event(ctrl);
+ 
+ 	event = xhci_wait_for_event(ctrl, TRB_COMPLETION, false);
+-- 
+2.17.1
+
