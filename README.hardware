@@ -86,7 +86,6 @@ in a different environment it may possibly have some issues.
 
 	Processor:              BCM2711 (Cortex-A72)
 	BootLoader:             Raspberry bootloader/GPU firmware and U-Boot
-	BootLoader Version:     Raspberry bootloader/GPU firmware contains in 2019-07-10-raspbian-buster-lite.img or
-	                        raspberrypi/firmware Release version "1.20190709"
-				U-Boot 2019.07-rc4 (Jul 10 2019 - 06:07:46 +0000)
+	BootLoader Version:     Raspberrypi firmware Release version "20200603"
+				U-Boot 2020.04 (Jun 30 2020 - 10:46:44 +0000)
 
