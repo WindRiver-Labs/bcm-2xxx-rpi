@@ -27,12 +27,12 @@ Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
  create mode 100644 drivers/pci/pcie_brcmstb.c
 
 diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-index 437cd9a055..543bd46b88 100644
+index 6d8c22aacf2..7e1e51d9ea7 100644
 --- a/drivers/pci/Kconfig
 +++ b/drivers/pci/Kconfig
-@@ -197,4 +197,13 @@ config PCIE_MEDIATEK
- 	  Say Y here if you want to enable Gen2 PCIe controller,
- 	  which could be found on MT7623 SoC family.
+@@ -205,4 +205,13 @@ config PCIE_ROCKCHIP
+ 	  Say Y here if you want to enable PCIe controller support on
+ 	  Rockchip SoCs.
  
 +config PCI_BRCMSTB
 +	bool "Broadcom STB PCIe controller"
@@ -45,17 +45,17 @@ index 437cd9a055..543bd46b88 100644
 +	  of the controller.
  endif
 diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
-index c051ecc9f3..3e53b1f717 100644
+index 955351c5c2c..29092916a68 100644
 --- a/drivers/pci/Makefile
 +++ b/drivers/pci/Makefile
-@@ -43,3 +43,4 @@ obj-$(CONFIG_PCI_PHYTIUM) += pcie_phytium.o
- obj-$(CONFIG_PCIE_INTEL_FPGA) += pcie_intel_fpga.o
+@@ -44,3 +44,4 @@ obj-$(CONFIG_PCIE_INTEL_FPGA) += pcie_intel_fpga.o
  obj-$(CONFIG_PCI_KEYSTONE) += pcie_dw_ti.o
  obj-$(CONFIG_PCIE_MEDIATEK) += pcie_mediatek.o
+ obj-$(CONFIG_PCIE_ROCKCHIP) += pcie_rockchip.o pcie_rockchip_phy.o
 +obj-$(CONFIG_PCI_BRCMSTB) += pcie_brcmstb.o
 diff --git a/drivers/pci/pcie_brcmstb.c b/drivers/pci/pcie_brcmstb.c
 new file mode 100644
-index 0000000000..dade79e9c8
+index 00000000000..dade79e9c86
 --- /dev/null
 +++ b/drivers/pci/pcie_brcmstb.c
 @@ -0,0 +1,623 @@
@@ -682,6 +682,3 @@ index 0000000000..dade79e9c8
 +	.ofdata_to_platdata	= brcm_pcie_ofdata_to_platdata,
 +	.priv_auto_alloc_size	= sizeof(struct brcm_pcie),
 +};
--- 
-2.23.0
-
