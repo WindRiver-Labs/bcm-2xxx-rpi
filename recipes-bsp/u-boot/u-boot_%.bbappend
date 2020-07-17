@@ -26,6 +26,8 @@ UBOOT_RPI4_SUPPORT_PATCHES = " \
     file://0004-xhci-ring.c-Add-the-poll_pend-state-to-properly-abor.patch \
     file://0005-xhci-ring-Fix-crash-when-issuing-usb-reset.patch \
     file://0006-usb.c-Add-a-retry-in-the-usb_prepare_device.patch \
+    file://0002-bcmgenet-Add-support-for-rgmii-rxid.patch \
+    file://0001-bcmgenet-fix-DMA-buffer-management.patch \
 "
 
 SRC_URI_append_raspberrypi4 = "${UBOOT_RPI4_SUPPORT_PATCHES}"
