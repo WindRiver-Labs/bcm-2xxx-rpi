@@ -28,6 +28,7 @@ UBOOT_RPI4_SUPPORT_PATCHES = " \
     file://0006-usb.c-Add-a-retry-in-the-usb_prepare_device.patch \
     file://0002-bcmgenet-Add-support-for-rgmii-rxid.patch \
     file://0001-bcmgenet-fix-DMA-buffer-management.patch \
+    file://0001-bcm2835-Add-simiple-framebuffer-for-use-with-fkms.patch \
 "
 
 SRC_URI_append_raspberrypi4 = "${UBOOT_RPI4_SUPPORT_PATCHES}"

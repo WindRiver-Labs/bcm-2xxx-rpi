@@ -1,0 +1,32 @@
+From 3fcfe022fb9f82f030f2540fd3f69cead750ebf4 Mon Sep 17 00:00:00 2001
+From: Jason Wessel <jason.wessel@windriver.com>
+Date: Tue, 21 Jul 2020 19:47:27 -0700
+Subject: [PATCH] bcm2835: Add simiple-framebuffer for use with fkms
+
+When the fkms dtb overlay is used only the simple-framebuffer is
+presented as a usable video display.
+
+Upstream-Status: Pending
+
+Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
+---
+ drivers/video/bcm2835.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/video/bcm2835.c b/drivers/video/bcm2835.c
+index 0888cb0019..39d72a118b 100644
+--- a/drivers/video/bcm2835.c
++++ b/drivers/video/bcm2835.c
+@@ -53,6 +53,9 @@ static int bcm2835_video_probe(struct udevice *dev)
+ static const struct udevice_id bcm2835_video_ids[] = {
+ 	{ .compatible = "brcm,bcm2835-hdmi" },
+ 	{ .compatible = "brcm,bcm2708-fb" },
++#ifndef CONFIG_VIDEO_DT_SIMPLEFB
++	{ .compatible = "simple-framebuffer" },
++#endif
+ 	{ }
+ };
+ 
+-- 
+2.17.1
+
