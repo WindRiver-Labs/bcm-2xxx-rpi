@@ -1,0 +1,30 @@
+From c7131da082f403debeb1ad4d96c584b0e0f21da5 Mon Sep 17 00:00:00 2001
+From: Limeng <Meng.Li@windriver.com>
+Date: Fri, 24 Jul 2020 12:38:35 +0800
+Subject: [PATCH] arch: arm: dts: remove unused  power supply dts property
+
+This power supply 'sd_vcc_reg' is not initialized during kernel
+boots up, because the regulator driver is set as a kernel
+module. So remove the  power supply dts property so that
+SD card wroks fine.
+
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+---
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+index f0b589bea026..ed5b0f968c83 100644
+--- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
++++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+@@ -183,7 +183,6 @@
+ /* EMMC2 is used to drive the SD card */
+ &emmc2 {
+ 	vqmmc-supply = <&sd_io_1v8_reg>;
+-	vmmc-supply = <&sd_vcc_reg>;
+ 	broken-cd;
+ 	status = "okay";
+ };
+-- 
+2.17.1
+
