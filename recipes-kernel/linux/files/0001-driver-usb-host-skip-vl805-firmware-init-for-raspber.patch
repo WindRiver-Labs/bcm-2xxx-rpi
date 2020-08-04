@@ -1,0 +1,56 @@
+From 17e498af629f47c76281118e5b8bd5ef2c94ffe7 Mon Sep 17 00:00:00 2001
+From: Limeng <Meng.Li@windriver.com>
+Date: Tue, 4 Aug 2020 11:23:09 +0800
+Subject: [PATCH] driver: usb: host: skip vl805 firmware init for raspberry pi
+ 4 B 1.4 board.
+
+This issue is introduced by mainline upstream commit
+c65822fef4ad("USB: pci-quirks: Add Raspberry Pi 4 quirk ").
+It is not compatible with raspberry pi 4 B 1.4 board, but works
+fine on 1.1/1.2 board.
+So, add a temporary patch as a workaround. This patch will be
+remove if there is a real fixing patch in Raspberry pi community.
+
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+---
+ drivers/usb/host/pci-quirks.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+index 04f685dc6ec7..adaf3fe77b0f 100644
+--- a/drivers/usb/host/pci-quirks.c
++++ b/drivers/usb/host/pci-quirks.c
+@@ -16,6 +16,7 @@
+ #include <linux/export.h>
+ #include <linux/acpi.h>
+ #include <linux/dmi.h>
++#include <linux/of_fdt.h>
+ 
+ #include <soc/bcm2835/raspberrypi-firmware.h>
+ 
+@@ -1293,13 +1294,15 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
+ 	if (pdev->vendor == 0x184e)	/* vendor Netlogic */
+ 		return;
+ 
+-	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
+-		ret = rpi_firmware_init_vl805(pdev);
+-		if (ret) {
+-			/* Firmware might be outdated, or something failed */
+-			dev_warn(&pdev->dev,
+-				 "Failed to load VL805's firmware: %d. Will continue to attempt to work, but bad things might happen. You should fix this...\n",
+-				 ret);
++	if (!strstr(of_flat_dt_get_machine_name(), "1.4")) {
++		if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
++			ret = rpi_firmware_init_vl805(pdev);
++			if (ret) {
++				/* Firmware might be outdated, or something failed */
++				dev_warn(&pdev->dev,
++					 "Failed to load VL805's firmware: %d. Will continue to attempt to work, but bad things might happen. You should fix this...\n",
++					 ret);
++			}
+ 		}
+ 	}
+ 
+-- 
+2.17.1
+
