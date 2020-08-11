@@ -7,7 +7,6 @@ XSERVER = " \
 "
 
 PNWHITELIST_openembedded-layer += 'libmms'
-PNWHITELIST_openembedded-layer += 'faad2'
 
 PREFERRED_PROVIDER_virtual/egl = "${@bb.utils.contains("MACHINE_FEATURES", "vc4graphics", "mesa", "userland", d)}"
 PREFERRED_PROVIDER_virtual/libgles2 = "${@bb.utils.contains("MACHINE_FEATURES", "vc4graphics", "mesa", "userland", d)}"
