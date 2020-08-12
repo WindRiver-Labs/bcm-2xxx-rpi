@@ -1,0 +1,23 @@
+Suspend to RAM is not supported by raspberry. So hide the button 'suspend' in
+'Log Out' dialog to avoid trigger suspend operation.
+
+Upstream-Status: Pending
+
+Signed-off-by: Kai Kang <kai.kang@windriver.com>
+---
+ xfce4-session/xfsm-logout-dialog.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xfce4-session/xfsm-logout-dialog.c b/xfce4-session/xfsm-logout-dialog.c
+index 6feca03..4a99bc9 100644
+--- a/xfce4-session/xfsm-logout-dialog.c
++++ b/xfce4-session/xfsm-logout-dialog.c
+@@ -297,7 +297,7 @@ xfsm_logout_dialog_init (XfsmLogoutDialog *dialog)
+     {
+       if (xfsm_shutdown_can_suspend (dialog->shutdown, &can_suspend, &auth_suspend, &error))
+         {
+-          if (can_suspend)
++          if (0)
+             {
+               button = xfsm_logout_dialog_button (_("Sus_pend"), "system-suspend",
+                                                   "xfsm-suspend", NULL,
