@@ -1,0 +1,23 @@
+Suspend to RAM is not supported by raspberry. So hide the menu 'suspend' in
+xfce4-panel actions plugin to avoid trigger suspend operation.
+
+Upstream-Status: Pending
+
+Signed-off-by: Kai Kang <kai.kang@windriver.com>
+---
+ plugins/actions/actions.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/actions/actions.c b/plugins/actions/actions.c
+index f87fd35..482496f 100644
+--- a/plugins/actions/actions.c
++++ b/plugins/actions/actions.c
+@@ -1283,7 +1283,7 @@ actions_plugin_default_array (void)
+       "+lock-screen",
+       "+switch-user",
+       "+separator",
+-      "+suspend",
++      "-suspend",
+       "-hibernate",
+       "-hybrid-sleep",
+       "-separator",
