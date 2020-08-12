@@ -1192,6 +1192,9 @@ dtparam=audio=on
 dtparam=i2c_arm=on
 dtparam=spi=on
 avoid_warnings=1
+[pi4]
+dtparam=i2c_arm=on
+dtparam=spi=on
 
 [all]
 disable_splash=1
