@@ -1,6 +1,6 @@
 IMAGE_INSTALL += "i2c-tools"
 IMAGE_INSTALL += "alsa-utils"
 IMAGE_INSTALL += "pm-utils"
-IMAGE_INSTALL += "linux-firmware"
+IMAGE_INSTALL += "linux-firmware-bcm43455 linux-firmware-bcm43430"
 IMAGE_INSTALL += "boot-config"
 IMAGE_INSTALL += "${@bb.utils.contains_any('BBEXTENDCURR', 'multilib', '', 'u-boot', d)}"
