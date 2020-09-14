@@ -406,3 +406,23 @@ it is need to add below configuration parameter in config.txt file.
 	hdmi_mode=1
 	hdmi_mode=87
 	hdmi_cvt 800 480 60 6 0 0 0
+
+13. Boot From USB Disk
+======================
+
+The latest Raspberry pi firmware supports for booting system from USB 3.0 Disk.
+The detail boot command as below:
+
+	U-Boot> usb start
+	U-Boot> fdt addr ${fdt_addr}
+	U-Boot> fdt resize
+	U-Boot> fdt get value bootargs1 /chosen bootargs
+	U-Boot> setenv bootargs "${bootargs1} root=/dev/sda2 rw rootwait ip=dhcp"
+	U-Boot> fatload usb 0:1 ${kernel_addr_r} Image
+	U-Boot> booti ${kernel_addr_r} - ${fdt_addr}
+
+Note:
+The default boot order as below:
+1: SD card 2: USB Disk
+So, if user wants to boot system from USB device, please make sure that SD card is not installed
+on board, or there is no bootloader in SD card attached on board.
