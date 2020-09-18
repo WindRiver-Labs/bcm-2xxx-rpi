@@ -15,7 +15,9 @@ Table of Contents
 
 This BSP supports the following boards:
 
-  + Raspberry Pi 4 Model B: BCM2711
+  + Raspberry Pi 4 Model B: BCM2711 rev1.1, with 4G DDR memory
+  + Raspberry Pi 4 Model B: BCM2711 rev1.2, with 4G DDR memory
+  + Raspberry Pi 4 Model B: BCM2711 rev1.4, with 8G DDR memory
 
 
 2. Change History
@@ -87,5 +89,5 @@ in a different environment it may possibly have some issues.
 	Processor:              BCM2711 (Cortex-A72)
 	BootLoader:             Raspberry bootloader/GPU firmware and U-Boot
 	BootLoader Version:     Raspberrypi firmware Release version "20200603"
-				U-Boot 2020.04 (Jun 30 2020 - 10:46:44 +0000)
+				U-Boot 2020.07 (Sep 15 2020 - 07:09:20 +0000)
 

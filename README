@@ -198,12 +198,6 @@ wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac4345
 
 Then you need to copy above download files to directory "/lib/firmware/brcm/" of rootfs.
 
-Note: Because WIFI driver loads the configure file named with the specific board information,
-      create a link file named brcmfmac43455-sdio.raspberrypi,4-model-b.txt with below command
-      to avoid outputing error log when system boots up.
-
-	# ln -s brcmfmac43455-sdio.txt brcmfmac43455-sdio.raspberrypi,4-model-b.txt
-
 5.2 Usage and verification
 --------------------------
 
@@ -284,8 +278,8 @@ To enable the audio device, the config.txt should contain 'dtparam=audio=on'.
 To load audio driver in WRLinux:
 $ sudo modprobe snd-bcm2835
 
-8.1 Audio playback(headphone jack)
-----------------------------------
+8.1 Audio playback(headphone)
+-----------------------------
 
 Verify with below command
 
@@ -346,7 +340,7 @@ If customer wants to enable GPU hardware accelerator, please add this
 layer before building image. With this layer, customer can get a
 image with matchbox desktop based on x11 protocol.
 
-The following descripion show how to use the graphics layer.
+The following description show how to use the graphics layer.
 
 11.1 Setup project with distro wrlinux-graphics
 ----------------------------------------------
@@ -378,6 +372,8 @@ Run below command to build image
 Connect with HDMI0 port(J6), mode 1680x1050@60.0
 Run below command:
 
+	# export EGL_PLATFORM="x11"
+	# export DISPLAY=:0
 	# es2gears_x11
 
 Output as below:
