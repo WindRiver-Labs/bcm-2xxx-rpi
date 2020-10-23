@@ -332,15 +332,14 @@ And run the below command to load i2c driver mode:
 
 $ sudo modprobe i2c-dev
 
-11. Graphics Layer
-==================
+11. Graphics
+============
 
-This layer includes recipes of graphic and multimedia feature.
-If customer wants to enable GPU hardware accelerator, please add this
-layer before building image. With this layer, customer can get a
-image with matchbox desktop based on x11 protocol.
+This BSP layer includes recipes of graphics and multimedia feature by default.
+The GPU hardware accelerator is enabled when setup raspberrypi BSP project.
+Customer can get a image with matchbox desktop based on x11 protocol.
 
-The following description show how to use the graphics layer.
+The following description show how to verify graphics feature.
 
 11.1 Setup project with distro wrlinux-graphics
 ----------------------------------------------
@@ -349,24 +348,17 @@ Detail command as below:
 
 	# <path-of-wrlinux-x>/setup.sh --machine bcm-2xxx-rpi4 --distro wrlinux-graphics --dl-layers --all-layers --accept-eula=yes
 
-11.2 Add Graphics Layer
------------------------
-
-Run below command to add the graphics layer
-
-	# cd <path-of-project>
-	# . environment-setup-x86_64-wrlinuxsdk-linux
-	# . oe-init-build-env
-	# bitbake-layers add-layer <path-of-bsplayer>/rpi-graphics
-
-11.3 Build Image
+11.2 Build Image
 ----------------
 
 Run below command to build image
 
+	# cd <path-of-project>
+	# . environment-setup-x86_64-wrlinuxsdk-linux
+	# . oe-init-build-env
 	# bitbake wrlinux-image-std-sato
 
-11.4 Verify Graphic feature
+11.3 Verify Graphic feature
 ---------------------------
 
 Connect with HDMI0 port(J6), mode 1680x1050@60.0
