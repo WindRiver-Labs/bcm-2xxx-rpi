@@ -77,9 +77,9 @@ index c16106a2fc..57feed7603 100644
  #define HOST_XHCI_H_
  
 +#include <usb.h>
+ #include <reset.h>
  #include <asm/types.h>
  #include <asm/cache.h>
- #include <asm/io.h>
 @@ -1281,4 +1282,6 @@ extern struct dm_usb_ops xhci_usb_ops;
  
  struct xhci_ctrl *xhci_get_ctrl(struct usb_device *udev);

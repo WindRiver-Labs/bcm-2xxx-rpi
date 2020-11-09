@@ -18,8 +18,8 @@ Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
 --- a/configs/rpi_4_32b_defconfig
 +++ b/configs/rpi_4_32b_defconfig
 @@ -33,3 +33,5 @@ CONFIG_SYS_WHITE_ON_BLACK=y
- CONFIG_CONSOLE_SCROLL_LINES=10
- CONFIG_PHYS_TO_BUS=y
+ CONFIG_ADDR_MAP=y
+ CONFIG_SYS_NUM_ADDR_MAP=2
  CONFIG_OF_LIBFDT_OVERLAY=y
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
