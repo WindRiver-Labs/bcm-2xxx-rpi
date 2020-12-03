@@ -218,17 +218,14 @@ Bluetooth functionality is provided by a UART P1011. To use this Bluetooth drive
 you will need a microcode (uCode) image. Since the license limitation, the firmware
 for rpi4 is here:
 
-wget https://github.com/RPi-Distro/bluez-firmware/raw/master/broadcom/BCM4345C0.hcd
+wget https://github.com/RPi-Distro/bluez-firmware/blob/master/broadcom/BCM4345C0.hcd
 
-Then you need to copy above download file to directory "/lib/firmware/brcm/" of rootfs.
+Then you need to copy above download file to directory "/lib/firmware/brcm/" of rootfs,
+and then reset board.
 
 6.2 Usage and verification
 --------------------------
-The following drivers must be loaded:
-
-	# hciattach /dev/ttyAMA0 bcm43xx 921600 noflow -
-
-Once loaded, the sysfs entry below should appear:
+Once system boots up, the sysfs entry below should appear:
 
 	/sys/module/bluetooth
 
