@@ -89,5 +89,5 @@ in a different environment it may possibly have some issues.
 	Processor:              BCM2711 (Cortex-A72)
 	BootLoader:             Raspberry bootloader/GPU firmware and U-Boot
 	BootLoader Version:     Raspberrypi firmware Release version "20200603"
-				U-Boot 2020.07 (Sep 15 2020 - 07:09:20 +0000)
+				U-Boot 2020.10 (Dec 22 2020 - 13:14:54 +0000)
 

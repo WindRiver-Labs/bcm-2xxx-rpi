@@ -190,14 +190,6 @@ For Raspberrypi4, please use below commands
 To use this WiFi driver, you will need a microcode (uCode) image.
 The microcode is typically installed in /lib/firmware/brcm.
 
-Since the license limitation, the firmware for rpi4 are here:
-
-wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac43455-sdio.bin
-wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac43455-sdio.clm_blob
-wget https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm/brcmfmac43455-sdio.txt 
-
-Then you need to copy above download files to directory "/lib/firmware/brcm/" of rootfs.
-
 5.2 Usage and verification
 --------------------------
 
@@ -214,14 +206,8 @@ Execute the following commands to validate the WIFI eature:
 
 6.1 Introduction
 ----------------
-Bluetooth functionality is provided by a UART P1011. To use this Bluetooth driver,
-you will need a microcode (uCode) image. Since the license limitation, the firmware
-for rpi4 is here:
-
-wget https://github.com/RPi-Distro/bluez-firmware/blob/master/broadcom/BCM4345C0.hcd
-
-Then you need to copy above download file to directory "/lib/firmware/brcm/" of rootfs,
-and then reset board.
+Bluetooth functionality is provided by a UART P1011. It works depend on a
+microcode (uCode) image in directory "/lib/firmware/brcm/" of rootfs.
 
 6.2 Usage and verification
 --------------------------
@@ -310,7 +296,7 @@ device, the config.txt should contain:
 gpu_mem could select others value like 256 or 512.
 
 To load video driver in WRLinux:
-$ sudo modprobe bcm2835-v4l2
+$ sudo modprobe bcm2835_v4l2
 
 To run camera test case with below commands:
 # export DISPLAY=:0
