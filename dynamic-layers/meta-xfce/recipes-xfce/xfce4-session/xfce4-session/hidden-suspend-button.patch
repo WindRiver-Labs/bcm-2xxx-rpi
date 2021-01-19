@@ -19,5 +19,5 @@ index 6feca03..4a99bc9 100644
 -          if (can_suspend)
 +          if (0)
              {
-               button = xfsm_logout_dialog_button (_("Sus_pend"), "system-suspend",
-                                                   "xfsm-suspend", NULL,
+               button = xfsm_logout_dialog_button (_("Sus_pend"), "xfsm-suspend",
+                                                   "system-suspend", NULL,
