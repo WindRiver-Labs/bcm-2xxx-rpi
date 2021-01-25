@@ -6,7 +6,7 @@ TARGET_SUPPORTED_KTYPES_rpi = "standard"
 COMPATIBLE_MACHINE_rpi = "bcm-2xxx-rpi4"
 
 inherit kernel siteinfo
-KERNEL_EXTRA_ARGS_append_rpi = " DTC_FLAGS='-@ -H epapr'"
+KERNEL_DTC_FLAGS_append_rpi = " -@ -H epapr"
 
 KERNEL_VERSION_SANITY_SKIP = "1"
 SRCREV_machine_rpi ?= "${AUTOREV}"
