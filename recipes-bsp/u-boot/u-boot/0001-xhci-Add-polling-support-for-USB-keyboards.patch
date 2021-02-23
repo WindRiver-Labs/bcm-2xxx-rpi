@@ -92,9 +92,9 @@ index 86aeaab412..b7b2e16410 100644
  	int num_trbs = 0;
  	struct xhci_generic_trb *start_trb;
 @@ -714,8 +720,10 @@ int xhci_bulk_tx(struct usb_device *udev, unsigned long pipe,
- 
  	giveback_first_trb(udev, ep_index, start_cycle, start_trb);
  
+ again:
 -	event = xhci_wait_for_event(ctrl, TRB_TRANSFER);
 +	event = xhci_wait_for_event(ctrl, TRB_TRANSFER, nonblock);
  	if (!event) {
