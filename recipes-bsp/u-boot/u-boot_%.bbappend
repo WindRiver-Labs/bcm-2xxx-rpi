@@ -15,6 +15,7 @@ UBOOT_RPI4_SUPPORT_PATCHES = " \
     file://0005-xhci-ring-Fix-crash-when-issuing-usb-reset.patch \
     file://0006-usb.c-Add-a-retry-in-the-usb_prepare_device.patch \
     file://0001-bcm2835-Add-simiple-framebuffer-for-use-with-fkms.patch \
+    file://0001-configs-rpi_arm64-Add-CONFIG_ENV_OVERWRITE-in-defcon.patch \
 "
 
 SRC_URI_append_raspberrypi4 = "${UBOOT_RPI4_SUPPORT_PATCHES}"
