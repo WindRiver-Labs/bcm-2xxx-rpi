@@ -295,9 +295,6 @@ device, the config.txt should contain:
 
 gpu_mem could select others value like 256 or 512.
 
-To load video driver in WRLinux:
-$ sudo modprobe bcm2835_v4l2
-
 To run camera test case with below commands:
 # export DISPLAY=:0
 # gst-launch-1.0 v4l2src device=/dev/video0 ! video/x-raw,format=YUY2,width=320,height=240 ! videoconvert ! autovideosink
