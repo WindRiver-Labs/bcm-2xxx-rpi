@@ -1,6 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-DEPENDS_append_rpi = " rpi-u-boot-scr bcm2835-bootfiles"
+DEPENDS_append_rpi = " rpi-u-boot-scr rpi-bootfiles"
 
 UBOOT_RPI4_SUPPORT_PATCHES = " \
     file://0001-rpi_4-defconfigs-Add-CONFIG_CMD_BOOT-menu.patch \
