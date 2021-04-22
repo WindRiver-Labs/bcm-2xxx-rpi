@@ -1,0 +1,75 @@
+From d66a0bcdfe6ffd609c7c27116ebdc6d50e46264d Mon Sep 17 00:00:00 2001
+From: Meng Li <Meng.Li@windriver.com>
+Date: Fri, 23 Apr 2021 16:18:09 +0800
+Subject: [PATCH] config: add BSP specific configuration in config.txt
+
+Create a patch to add BSP specific  configuration in config.txt
+so that keep consistent with the previous one.
+
+Signed-off-by: Meng Li <Meng.Li@windriver.com>
+---
+ config.txt | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/config.txt b/config.txt
+index 16db254..e3349cb 100644
+--- a/config.txt
++++ b/config.txt
+@@ -395,7 +395,7 @@
+ ##     32       Has no corruption issues but needs framebuffer_ignore_alpha=1
+ ##              and shows the wrong colors as of 2012/06/15
+ ##
+-#framebuffer_depth=16
++framebuffer_depth=16
+ 
+ ## framebuffer_ignore_alpha
+ ##     Set to 1 to disable alpha channel. Helps with 32bit.
+@@ -467,6 +467,7 @@
+ ##     Default 0
+ ##
+ #start_x=0
++start_x=1
+ 
+ ## disable_camera_led
+ ##     Turn off the red camera led when recording video or taking a still
+@@ -514,6 +515,7 @@
+ ##     Default 64
+ ##
+ #gpu_mem=128
++gpu_mem=128
+ 
+ ## gpu_mem_256
+ ##     GPU memory allocation in MB for 256MB board revision.
+@@ -1064,6 +1066,7 @@
+ ##     Default off.
+ ##
+ #dtparam=audio=off
++dtparam=audio=on
+ 
+ ## i2c_arm
+ ##     Enable the ARM's i2c interface
+@@ -1185,3 +1188,21 @@
+ ##     Default 35.
+ ##
+ #dtparam=pwr_led_gpio=35
++[pi3]
++dtparam=i2c_arm=on
++dtparam=spi=on
++avoid_warnings=1
++[pi4]
++dtparam=i2c_arm=on
++dtparam=spi=on
++
++[all]
++disable_splash=1
++# Enable UART
++enable_uart=1
++# Enable VC4 Graphics
++dtoverlay=vc4-fkms-v3d
++kernel=kernel8.img
++
++# Force arm in 64bit mode. See: https://github.com/raspberrypi/firmware/issues/1193.
++arm_64bit=1
+-- 
+2.17.1
+
