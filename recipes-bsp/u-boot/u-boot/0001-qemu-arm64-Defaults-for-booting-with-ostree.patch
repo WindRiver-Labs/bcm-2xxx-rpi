@@ -12,9 +12,10 @@ Signed-off-by: Jason Wessel <jason.wessel@windriver.com>
 Add CONFIG_PREBOOT to workaround issue after u-boot upgrade
 
 Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+Signed-off-by: Changqing Li <changqing.li@windriver.com>
 ---
  configs/qemu_arm64_defconfig | 3 +++
- include/configs/qemu-arm.h   | 4 ++++
+ include/configs/qemu-arm.h   | 5 +++++
  2 files changed, 7 insertions(+)
 
 diff --git a/configs/qemu_arm64_defconfig b/configs/qemu_arm64_defconfig
@@ -32,7 +33,7 @@ diff --git a/include/configs/qemu-arm.h b/include/configs/qemu-arm.h
 index bc8b7c5c12..fdfbb0f105 100644
 --- a/include/configs/qemu-arm.h
 +++ b/include/configs/qemu-arm.h
-@@ -36,6 +36,10 @@
+@@ -36,6 +36,11 @@
  	"fdt_high=0xffffffff\0" \
  	"initrd_high=0xffffffff\0" \
  	"fdt_addr=0x40000000\0" \
@@ -40,6 +41,7 @@ index bc8b7c5c12..fdfbb0f105 100644
 +	"baudrate=115200\0" \
 +	"loadaddr=0x40080000\0" \
 +	"initrd_addr=0x43000000\0" \
++	"use_fdtdtb=2\0" \
  	"scriptaddr=0x40200000\0" \
  	"pxefile_addr_r=0x40300000\0" \
  	"kernel_addr_r=0x40400000\0" \
