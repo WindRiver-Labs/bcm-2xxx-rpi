@@ -33,7 +33,7 @@ index d6339f4f0a..f2a07204cd 100644
 @@ -505,11 +507,16 @@ static void abort_td(struct usb_device *udev, int ep_index)
  	xhci_queue_command(ctrl, NULL, udev->slot_id, ep_index, TRB_STOP_RING);
  
- 	event = xhci_wait_for_event(ctrl, TRB_TRANSFER, false);
+ 	event = xhci_wait_for_event(ctrl, TRB_TRANSFER);
 -	field = le32_to_cpu(event->trans_event.flags);
 -	BUG_ON(TRB_TO_SLOT_ID(field) != udev->slot_id);
 -	BUG_ON(TRB_TO_EP_INDEX(field) != ep_index);
@@ -51,7 +51,7 @@ index d6339f4f0a..f2a07204cd 100644
 +	}
  	xhci_acknowledge_event(ctrl);
  
- 	event = xhci_wait_for_event(ctrl, TRB_COMPLETION, false);
+ 	event = xhci_wait_for_event(ctrl, TRB_COMPLETION);
 -- 
 2.17.1
 

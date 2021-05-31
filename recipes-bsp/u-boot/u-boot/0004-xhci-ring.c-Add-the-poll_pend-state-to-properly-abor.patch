@@ -35,7 +35,7 @@ index a8507266e5..cfefe79221 100644
  /**
   * Is this TRB a link TRB or was the last TRB the last TRB in this event ring
   * segment?  I.e. would the updated event TRB pointer step off the end of the
-@@ -551,19 +557,8 @@ static void record_transfer_result(struct usb_device *udev,
+@@ -551,18 +557,8 @@ static void record_transfer_result(struct usb_device *udev,
  	}
  }
  
@@ -47,11 +47,10 @@ index a8507266e5..cfefe79221 100644
 - * @param pipe		contains the DIR_IN or OUT , devnum
 - * @param length	length of the buffer
 - * @param buffer	buffer to be read/written based on the request
-- * @param nonblock	when true do not block waiting for response
 - * @return returns 0 if successful else -1 on failure
 - */
 -int xhci_bulk_tx(struct usb_device *udev, unsigned long pipe,
--			int length, void *buffer, bool nonblock)
+-			int length, void *buffer)
 +static int _xhci_bulk_tx_queue(struct usb_device *udev, unsigned long pipe,
 +			       int length, void *buffer, void **last_transfer_trb_addr)
  {
@@ -88,7 +87,7 @@ index a8507266e5..cfefe79221 100644
  
  		--num_trbs;
  
-@@ -719,17 +710,76 @@ int xhci_bulk_tx(struct usb_device *udev, unsigned long pipe,
+@@ -719,15 +710,72 @@ int xhci_bulk_tx(struct usb_device *udev, unsigned long pipe,
  
  	giveback_first_trb(udev, ep_index, start_cycle, start_trb);
  
@@ -103,11 +102,10 @@ index a8507266e5..cfefe79221 100644
 + * @param pipe		contains the DIR_IN or OUT , devnum
 + * @param length	length of the buffer
 + * @param buffer	buffer to be read/written based on the request
-+ * @param nonblock	when true do not block waiting for response
 + * @return returns 0 if successful else -1 on failure
 + */
 +int xhci_bulk_tx(struct usb_device *udev, unsigned long pipe,
-+		 int length, void *buffer, bool nonblock)
++		 int length, void *buffer)
 +{
 +	u32 field;
 +	int ret;
@@ -142,18 +140,14 @@ index a8507266e5..cfefe79221 100644
 +	}
 +
  again:
- 	event = xhci_wait_for_event(ctrl, TRB_TRANSFER, nonblock);
+ 	event = xhci_wait_for_event(ctrl, TRB_TRANSFER);
  	if (!event) {
--		if (nonblock)
-+		if (nonblock) {
-+			if (!poll_pend) {
-+				/* Start the timer */
-+				bulk_tx_poll_ts = get_timer(0);
-+				poll_last_udev = udev;
-+				poll_last_ep_index = ep_index;
-+				poll_pend = true;
-+			}
- 			return -EINVAL;
++		if (!poll_pend) {
++			/* Start the timer */
++			bulk_tx_poll_ts = get_timer(0);
++			poll_last_udev = udev;
++			poll_last_ep_index = ep_index;
++			poll_pend = true;
 +		}
  		debug("XHCI bulk transfer timed out, aborting...\n");
  		abort_td(udev, ep_index);

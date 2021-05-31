@@ -8,7 +8,6 @@ UBOOT_RPI4_SUPPORT_PATCHES = " \
     file://boot_cmd.patch \
     file://pcie-usb-linux-yocto.patch \
     file://0001-qemu-arm64-Defaults-for-booting-with-ostree.patch \
-    file://0001-xhci-Add-polling-support-for-USB-keyboards.patch \
     file://0002-usb_kbd-Do-not-fail-the-keyboard-if-it-does-not-have.patch \
     file://0003-common-usb.c-Work-around-keyboard-reporting-USB-devi.patch \
     file://0004-xhci-ring.c-Add-the-poll_pend-state-to-properly-abor.patch \
