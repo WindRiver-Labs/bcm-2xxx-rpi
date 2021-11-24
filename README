@@ -157,16 +157,16 @@ Note:
 For Raspberrypi4, there is not network in u-boot, so load kernel from SD card
 	# fatload mmc 0:1 ${kernel_addr_r} Image
 
-4.1.3 Download dtb
+4.1.4 Download dtb
 ------------------
 
 	# tftp 0x02600000 <Board Name>.dtb
 
 Note:
-For Raspberrypi4, there is no need to load dtb file. Because Raspberrypi special boorloader modify dtb file
+For Raspberrypi4, there is no need to load dtb file. Because Raspberrypi special bootloader modify dtb file
 on SD card after board power on, and then put the dtb at address 0x2eff5c00
 
-4.1.4 Set bootargs and boot system
+4.1.5 Set bootargs and boot system
 ----------------------------------
 
 	# setenv bootargs console=ttyS0,115200n8 root=/dev/nfs rw nfsroot=<nfs server>:<nfs root>,v3,tcp \
