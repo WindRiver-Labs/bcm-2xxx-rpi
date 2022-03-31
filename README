@@ -394,3 +394,11 @@ The default boot order as below:
 1: SD card 2: USB Disk
 So, if user wants to boot system from USB device, please make sure that SD card is not installed
 on board, or there is no bootloader in SD card attached on board.
+
+14. Build U-Boot
+================
+
+By default, the u-boot image is compiled and installed. If you want u-boot to be manually
+compiled separately, use the following command：
+
+        # bitbake u-boot
