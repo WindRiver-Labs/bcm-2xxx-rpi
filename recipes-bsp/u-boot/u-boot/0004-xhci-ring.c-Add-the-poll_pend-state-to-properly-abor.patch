@@ -67,7 +67,7 @@ index a8507266e5..cfefe79221 100644
 @@ -586,13 +580,10 @@ int xhci_bulk_tx(struct usb_device *udev, unsigned long pipe,
  	int ret;
  	u32 trb_fields[4];
- 	u64 val_64 = virt_to_phys(buffer);
+ 	u64 val_64 = xhci_virt_to_bus(ctrl, buffer);
 -	void *last_transfer_trb_addr;
 -	int available_length;
  
@@ -158,8 +158,8 @@ index a8507266e5..cfefe79221 100644
  	}
 +	poll_pend = false;
  
- 	if ((uintptr_t)(le64_to_cpu(event->trans_event.buffer))
- 			!= (uintptr_t)last_transfer_trb_addr) {
+ 	if ((uintptr_t)(le64_to_cpu(event->trans_event.buffer)) !=
+ 	    (uintptr_t)xhci_virt_to_bus(ctrl, last_transfer_trb_addr)) {
 @@ -740,7 +790,7 @@ again:
  	}
  

@@ -1,6 +1,6 @@
-From 5a6a33cbd57e40704e4d696bd1630cf55ab0c421 Mon Sep 17 00:00:00 2001
+From d7b4514bee6edc008b098b3c0fd47b73c60444fb Mon Sep 17 00:00:00 2001
 From: Jason Wessel <jason.wessel@windriver.com>
-Date: Wed, 18 Nov 2020 16:12:46 +0800
+Date: Tue, 23 Nov 2021 16:21:30 +0800
 Subject: [PATCH] qemu-arm64: Defaults for booting with ostree
 
 Set reasonable defaults for using booting with an ostree provided boot.scr.
@@ -13,24 +13,25 @@ Add CONFIG_PREBOOT to workaround issue after u-boot upgrade
 
 Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
 Signed-off-by: Changqing Li <changqing.li@windriver.com>
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
 ---
  configs/qemu_arm64_defconfig | 3 +++
  include/configs/qemu-arm.h   | 5 +++++
- 2 files changed, 7 insertions(+)
+ 2 files changed, 8 insertions(+)
 
 diff --git a/configs/qemu_arm64_defconfig b/configs/qemu_arm64_defconfig
-index 31ea2d342f..419b7f8690 100644
+index 2969e90ca8..8db8eb22c0 100644
 --- a/configs/qemu_arm64_defconfig
 +++ b/configs/qemu_arm64_defconfig
-@@ -53,3 +53,6 @@ CONFIG_USB=y
- CONFIG_DM_USB=y
+@@ -50,3 +50,6 @@ CONFIG_SYSRESET_PSCI=y
  CONFIG_USB_EHCI_HCD=y
  CONFIG_USB_EHCI_PCI=y
+ CONFIG_TPM=y
 +CONFIG_MENU=y
 +CONFIG_CMD_BOOTMENU=y
 +CONFIG_PREBOOT="test -n ${fdtcontroladdr} && setenv fdt_addr ${fdtcontroladdr}"
 diff --git a/include/configs/qemu-arm.h b/include/configs/qemu-arm.h
-index bc8b7c5c12..fdfbb0f105 100644
+index 273fa1a7d7..c5401dfdb9 100644
 --- a/include/configs/qemu-arm.h
 +++ b/include/configs/qemu-arm.h
 @@ -36,6 +36,11 @@
@@ -46,5 +47,5 @@ index bc8b7c5c12..fdfbb0f105 100644
  	"pxefile_addr_r=0x40300000\0" \
  	"kernel_addr_r=0x40400000\0" \
 -- 
-2.18.2
+2.27.0
 

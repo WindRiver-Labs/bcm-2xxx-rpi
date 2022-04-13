@@ -17,6 +17,10 @@ UBOOT_RPI4_SUPPORT_PATCHES = " \
     file://0001-configs-rpi_arm64-Add-CONFIG_ENV_OVERWRITE-in-defcon.patch \
 "
 
+# upgrade u-boot to 2022.01
+SRCREV_raspberrypi4 = "d637294e264adfeb29f390dfc393106fd4d41b17"
+SRC_URI_raspberrypi4 = "git://git.denx.de/u-boot.git;branch=master"
+
 SRC_URI_append_raspberrypi4 = "${UBOOT_RPI4_SUPPORT_PATCHES}"
 
 # Also build a specfic qemu-u-boot.bin

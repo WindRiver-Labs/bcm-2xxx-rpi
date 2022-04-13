@@ -18,8 +18,8 @@ index 0888cb0019..39d72a118b 100644
 --- a/drivers/video/bcm2835.c
 +++ b/drivers/video/bcm2835.c
 @@ -53,6 +53,9 @@ static int bcm2835_video_probe(struct udevice *dev)
- static const struct udevice_id bcm2835_video_ids[] = {
  	{ .compatible = "brcm,bcm2835-hdmi" },
+ 	{ .compatible = "brcm,bcm2711-hdmi0" },
  	{ .compatible = "brcm,bcm2708-fb" },
 +#ifndef CONFIG_VIDEO_DT_SIMPLEFB
 +	{ .compatible = "simple-framebuffer" },
